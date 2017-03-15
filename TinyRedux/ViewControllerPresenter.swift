@@ -21,8 +21,8 @@ public final class ViewControllerPresenter<State, Store: ObservableStore> where 
 
 	func configure(from presentationStack: [String]) {
 		queue.async {
+			let semaphore = DispatchSemaphore(value: 0)
 			if let index = indexOfMismatch(lhs: self.currentStack, rhs: presentationStack) {
-				let semaphore = DispatchSemaphore(value: 0)
 				var count = self.viewControllerCount()
 				while count > index {
 					let top = self.topViewController()
@@ -36,7 +36,6 @@ public final class ViewControllerPresenter<State, Store: ObservableStore> where 
 				}
 			}
 
-			let semaphore = DispatchSemaphore(value: 0)
 			var count = self.viewControllerCount()
 			while count < presentationStack.count {
 				guard let vc = self.factories[presentationStack[count]]?() else { fatalError("can't construct view controller \(presentationStack[count])") }
