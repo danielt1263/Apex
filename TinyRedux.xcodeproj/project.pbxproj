@@ -13,6 +13,7 @@
 		0905697E1E79C60600C3A4A8 /* Store.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0905697C1E79C60600C3A4A8 /* Store.swift */; };
 		0905697F1E79C60600C3A4A8 /* ViewControllerPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0905697D1E79C60600C3A4A8 /* ViewControllerPresenter.swift */; };
 		090569811E79C76800C3A4A8 /* ObservableStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 090569801E79C76800C3A4A8 /* ObservableStore.swift */; };
+		7292247C1E7CBD93009C2EF7 /* Dispatcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7292247B1E7CBD93009C2EF7 /* Dispatcher.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -35,6 +36,7 @@
 		0905697C1E79C60600C3A4A8 /* Store.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Store.swift; sourceTree = "<group>"; };
 		0905697D1E79C60600C3A4A8 /* ViewControllerPresenter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewControllerPresenter.swift; sourceTree = "<group>"; };
 		090569801E79C76800C3A4A8 /* ObservableStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ObservableStore.swift; sourceTree = "<group>"; };
+		7292247B1E7CBD93009C2EF7 /* Dispatcher.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Dispatcher.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -79,6 +81,7 @@
 			children = (
 				090569651E79C5DC00C3A4A8 /* TinyRedux.h */,
 				090569801E79C76800C3A4A8 /* ObservableStore.swift */,
+				7292247B1E7CBD93009C2EF7 /* Dispatcher.swift */,
 				0905697C1E79C60600C3A4A8 /* Store.swift */,
 				0905697D1E79C60600C3A4A8 /* ViewControllerPresenter.swift */,
 				090569661E79C5DC00C3A4A8 /* Info.plist */,
@@ -210,6 +213,7 @@
 			files = (
 				0905697E1E79C60600C3A4A8 /* Store.swift in Sources */,
 				0905697F1E79C60600C3A4A8 /* ViewControllerPresenter.swift in Sources */,
+				7292247C1E7CBD93009C2EF7 /* Dispatcher.swift in Sources */,
 				090569811E79C76800C3A4A8 /* ObservableStore.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

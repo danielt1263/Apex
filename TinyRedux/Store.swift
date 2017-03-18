@@ -7,12 +7,14 @@
 //
 
 
-public final class Store<State, Action>: ObservableStore {
+public final class Store<State, Action>: ObservableStore, Dispatcher {
 
 	public typealias Reducer = (State, Action) -> State
 	public typealias Observer = (State) -> Void
 	public typealias Dispatcher = (Action) -> Void
 	public typealias Middleware = (@escaping Dispatcher, @escaping () -> State) -> Dispatcher
+
+	public private (set) var state: State
 
 	public init(state: State, reducer: @escaping Reducer, middleware: [Middleware] = []) {
 		self.state = state
@@ -51,7 +53,6 @@ public final class Store<State, Action>: ObservableStore {
 	}
 
 	private let reduce: Reducer
-	private var state: State
 	private var isDispatching = false
 	private var subscribers: [UUID: Observer] = [:]
 	private var dispatcher: Dispatcher = { _ in fatalError() }
