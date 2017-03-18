@@ -16,7 +16,7 @@ public final class ViewControllerPresenter<State, Store: ObservableStore> where 
 		self.rootViewController = rootViewController
 		unsubscriber = store.subscribe(observer: { [weak self] presentationStack in
 			self?.configure(from: presentationStack)
-			}, lens: lens)
+		}, lens: lens)
 	}
 
 	func configure(from presentationStack: [String]) {
