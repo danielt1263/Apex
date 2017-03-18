@@ -15,7 +15,7 @@
 		090569811E79C76800C3A4A8 /* ObservableStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 090569801E79C76800C3A4A8 /* ObservableStore.swift */; };
 		721C62EB1E7D51B40047A914 /* PopPushTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 721C62EA1E7D51B40047A914 /* PopPushTests.swift */; };
 		721C62ED1E7D535D0047A914 /* PopPushAlgorithm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 721C62EC1E7D535D0047A914 /* PopPushAlgorithm.swift */; };
-		7292247C1E7CBD93009C2EF7 /* Dispatcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7292247B1E7CBD93009C2EF7 /* Dispatcher.swift */; };
+		721C62F91E7DE9DB0047A914 /* ThunkMiddleware.swift in Sources */ = {isa = PBXBuildFile; fileRef = 721C62F81E7DE9DB0047A914 /* ThunkMiddleware.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -40,7 +40,7 @@
 		090569801E79C76800C3A4A8 /* ObservableStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ObservableStore.swift; sourceTree = "<group>"; };
 		721C62EA1E7D51B40047A914 /* PopPushTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PopPushTests.swift; sourceTree = "<group>"; };
 		721C62EC1E7D535D0047A914 /* PopPushAlgorithm.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PopPushAlgorithm.swift; sourceTree = "<group>"; };
-		7292247B1E7CBD93009C2EF7 /* Dispatcher.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Dispatcher.swift; sourceTree = "<group>"; };
+		721C62F81E7DE9DB0047A914 /* ThunkMiddleware.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ThunkMiddleware.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -85,8 +85,8 @@
 			children = (
 				090569651E79C5DC00C3A4A8 /* TinyRedux.h */,
 				090569801E79C76800C3A4A8 /* ObservableStore.swift */,
-				7292247B1E7CBD93009C2EF7 /* Dispatcher.swift */,
 				0905697C1E79C60600C3A4A8 /* Store.swift */,
+				721C62F81E7DE9DB0047A914 /* ThunkMiddleware.swift */,
 				0905697D1E79C60600C3A4A8 /* ViewControllerPresenter.swift */,
 				721C62EC1E7D535D0047A914 /* PopPushAlgorithm.swift */,
 				090569661E79C5DC00C3A4A8 /* Info.plist */,
@@ -217,9 +217,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				721C62F91E7DE9DB0047A914 /* ThunkMiddleware.swift in Sources */,
 				0905697E1E79C60600C3A4A8 /* Store.swift in Sources */,
 				0905697F1E79C60600C3A4A8 /* ViewControllerPresenter.swift in Sources */,
-				7292247C1E7CBD93009C2EF7 /* Dispatcher.swift in Sources */,
 				090569811E79C76800C3A4A8 /* ObservableStore.swift in Sources */,
 				721C62ED1E7D535D0047A914 /* PopPushAlgorithm.swift in Sources */,
 			);

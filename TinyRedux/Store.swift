@@ -7,28 +7,25 @@
 //
 
 
-public final class Store<State, Action>: ObservableStore, Dispatcher {
+public final class Store<State, Action>: ObservableStore {
 
 	public typealias Reducer = (State, Action) -> State
 	public typealias Observer = (State) -> Void
 	public typealias Dispatcher = (Action) -> Void
-	public typealias Middleware = (@escaping Dispatcher, @escaping () -> State) -> Dispatcher
+	public typealias Middleware = (_ store: Store, _ next: @escaping Dispatcher) -> Dispatcher
 
 	public private (set) var state: State
 
 	public init(state: State, reducer: @escaping Reducer, middleware: [Middleware] = []) {
 		self.state = state
 		reduce = reducer
-		dispatcher = middleware.reversed().reduce(self._dispatch) { (dispatcher: @escaping Dispatcher, middleware: Middleware) -> Dispatcher in
-			middleware(dispatcher, { self.state })
+		dispatcher = middleware.reversed().reduce(self._dispatch) { result, middleware -> Dispatcher in
+			return middleware(self, result)
 		}
 	}
 
 	public func dispatch(action: Action) {
-		guard !isDispatching else { fatalError("Cannot dispatch in the middle of a dispatch") }
-		isDispatching = true
 		self.dispatcher(action)
-		isDispatching = false
 	}
 
 	public func subscribe(observer: @escaping Observer) -> Unsubscriber {
@@ -46,10 +43,13 @@ public final class Store<State, Action>: ObservableStore, Dispatcher {
 	}
 
 	private func _dispatch(action: Action) {
+		guard !isDispatching else { fatalError("Cannot dispatch in the middle of a dispatch") }
+		isDispatching = true
 		state = reduce(state, action)
 		for subscriber in subscribers.values {
 			subscriber(state)
 		}
+		isDispatching = false
 	}
 
 	private let reduce: Reducer
