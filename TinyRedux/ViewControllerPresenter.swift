@@ -9,10 +9,20 @@
 import UIKit
 
 
+public struct ViewControllerFactory {
+	public let build: [String: () -> UIViewController]
+	public let alertControllerIDs: Set<String>
+	
+	public init(factories: [String: () -> UIViewController], alertIDs: [String]) {
+		build = factories
+		alertControllerIDs = Set(alertIDs)
+	}
+}
+
 public final class ViewControllerPresenter<State, Store: ObservableStore> where Store.State == State {
 
-	public init(rootViewController: UIViewController, factories: [String: () -> UIViewController], store: Store, lens: @escaping (State) -> [String]) {
-		self.factories = factories
+	public init(rootViewController: UIViewController, factory: ViewControllerFactory, store: Store, lens: @escaping (State) -> [String]) {
+		self.factory = factory
 		self.rootViewController = rootViewController
 		unsubscriber = store.subscribe(observer: { [weak self] presentationStack in
 			self?.configure(from: presentationStack)
@@ -22,39 +32,39 @@ public final class ViewControllerPresenter<State, Store: ObservableStore> where 
 	func configure(from presentationStack: [String]) {
 		queue.async {
 			let semaphore = DispatchSemaphore(value: 0)
-			if let index = indexOfMismatch(lhs: self.currentStack, rhs: presentationStack) {
-				var count = self.viewControllerCount()
-				while count > index {
-					let top = self.topViewController()
-					DispatchQueue.main.async {
-						top.dismiss(animated: count == index + 1, completion: {
-							semaphore.signal()
-						})
-					}
-					semaphore.wait()
-					count -= 1
-				}
-			}
 
-			var count = self.viewControllerCount()
-			while count < presentationStack.count {
-				guard let vc = self.factories[presentationStack[count]]?() else { fatalError("can't construct view controller \(presentationStack[count])") }
+			func pop(id: String) {
+				guard self.factory.alertControllerIDs.contains(id) == false else { return }
 				let top = self.topViewController()
+				assert(top != self.rootViewController, "Can't dismiss the root view controller. Did you forget fill in the alert IDs?")
 				DispatchQueue.main.async {
-					top.present(vc, animated: count == presentationStack.count - 1, completion: {
+					top.dismiss(animated: true, completion: {
 						semaphore.signal()
 					})
 				}
 				semaphore.wait()
-				count += 1
 			}
+			
+			func push(id: String) {
+				guard let vc = self.factory.build[id]?() else { fatalError("can't construct view controller \(id)") }
+				let top = self.topViewController()
+				DispatchQueue.main.async {
+					top.present(vc, animated: true, completion: {
+						semaphore.signal()
+					})
+				}
+				semaphore.wait()
+			}
+			
+			popPush(current: self.currentStack, target: presentationStack, pop: pop, push: push)
+			self.currentStack = presentationStack
 		}
 	}
 
 	private var unsubscriber: Unsubscriber? = nil
 	private var currentStack: [String] = []
 	private let queue = DispatchQueue(label: "view_controller_presenter")
-	private let factories: [String: () -> UIViewController]
+	private let factory: ViewControllerFactory
 	private let rootViewController: UIViewController
 
 	private func viewControllerCount() -> Int {
@@ -74,10 +84,4 @@ public final class ViewControllerPresenter<State, Store: ObservableStore> where 
 		}
 		return result
 	}
-}
-
-func indexOfMismatch<T>(lhs: [T], rhs: [T]) -> Int?
-	where T: Equatable {
-		let combine = Array(zip(lhs, rhs))
-		return combine.index(where: { $0.0 != $0.1 })
 }
