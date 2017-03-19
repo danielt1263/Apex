@@ -9,7 +9,8 @@
 import Foundation
 
 
-func popPush(current: [String], target: [String], pop: (String) -> Void, push: (String) -> Void) {
+public
+func popPush<T>(current: [T], target: [T], pop: (T) -> Void, push: (T) -> Void) where T: Equatable {
 	
 	var count = current.count
 	if let indexOfChange = Array(zip(current, target)).index(where: { $0 != $1 }) {
@@ -22,7 +23,7 @@ func popPush(current: [String], target: [String], pop: (String) -> Void, push: (
 		count -= 1
 		pop(current[count])
 	}
-
+	
 	while count < target.count {
 		push(target[count])
 		count += 1
