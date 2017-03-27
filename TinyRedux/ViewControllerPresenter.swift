@@ -9,15 +9,7 @@
 import UIKit
 
 
-public struct ViewControllerFactory {
-	public let build: [String: () -> UIViewController]
-	public let alertControllerIDs: Set<String>
-	
-	public init(factories: [String: () -> UIViewController], alertIDs: [String]) {
-		build = factories
-		alertControllerIDs = Set(alertIDs)
-	}
-}
+public typealias ViewControllerFactory = [String: () -> UIViewController]
 
 public final class ViewControllerPresenter<State, Store: ObservableStore> where Store.State == State {
 
@@ -34,8 +26,8 @@ public final class ViewControllerPresenter<State, Store: ObservableStore> where 
 			let semaphore = DispatchSemaphore(value: 0)
 
 			func pop(id: String) {
-				guard self.factory.alertControllerIDs.contains(id) == false else { return }
-				let top = self.topViewController()
+				let top = topViewController()
+				guard self.viewControllers.values.contains(where: { $0.value == top }) else { return }
 				assert(top != self.rootViewController, "Can't dismiss the root view controller. Did you forget fill in the alert IDs?")
 				DispatchQueue.main.async {
 					top.dismiss(animated: true, completion: {
@@ -46,8 +38,9 @@ public final class ViewControllerPresenter<State, Store: ObservableStore> where 
 			}
 			
 			func push(id: String) {
-				guard let vc = self.factory.build[id]?() else { fatalError("can't construct view controller \(id)") }
-				let top = self.topViewController()
+				guard let vc = self.factory[id]?() else { fatalError("can't construct view controller \(id)") }
+				self.viewControllers[id] = WeakBox(value: vc)
+				let top = topViewController()
 				DispatchQueue.main.async {
 					top.present(vc, animated: true, completion: {
 						semaphore.signal()
@@ -56,6 +49,7 @@ public final class ViewControllerPresenter<State, Store: ObservableStore> where 
 				semaphore.wait()
 			}
 			
+			self.cull()
 			popPush(current: self.currentStack, target: presentationStack, pop: pop, push: push)
 			self.currentStack = presentationStack
 		}
@@ -63,25 +57,37 @@ public final class ViewControllerPresenter<State, Store: ObservableStore> where 
 
 	private var unsubscriber: Unsubscriber? = nil
 	private var currentStack: [String] = []
+	private var viewControllers: [String: WeakBox<UIViewController>] = [:]
 	private let queue = DispatchQueue(label: "view_controller_presenter")
 	private let factory: ViewControllerFactory
 	private let rootViewController: UIViewController
 
-	private func viewControllerCount() -> Int {
-		var result = 0
-		var controller = rootViewController
-		while let vc = controller.presentedViewController {
-			result += 1
-			controller = vc
+	private func cull() {
+		for (key, box) in viewControllers {
+			if box.value == nil {
+				viewControllers.removeValue(forKey: key)
+			}
 		}
-		return result
+		while let i = currentStack.index(where: { !viewControllers.keys.contains($0) }) {
+			currentStack.remove(at: i)
+		}
 	}
 
-	private func topViewController() -> UIViewController {
-		var result = rootViewController
-		while let vc = result.presentedViewController {
-			result = vc
-		}
-		return result
+}
+
+protocol ReferenceObject: class { }
+
+struct WeakBox<T> where T: ReferenceObject {
+	weak var value: T?
+}
+
+extension UIViewController: ReferenceObject { }
+
+func topViewController() -> UIViewController {
+	guard let rootViewController = UIApplication.shared.delegate?.window??.rootViewController else { fatalError("No view controller present in app?") }
+	var result = rootViewController
+	while let vc = result.presentedViewController {
+		result = vc
 	}
+	return result
 }

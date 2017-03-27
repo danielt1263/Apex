@@ -11,7 +11,7 @@ import Foundation
 
 public
 func popPush<T>(current: [T], target: [T], pop: (T) -> Void, push: (T) -> Void) where T: Equatable {
-	
+
 	var count = current.count
 	if let indexOfChange = Array(zip(current, target)).index(where: { $0 != $1 }) {
 		while count > indexOfChange {
@@ -23,7 +23,7 @@ func popPush<T>(current: [T], target: [T], pop: (T) -> Void, push: (T) -> Void) 
 		count -= 1
 		pop(current[count])
 	}
-	
+
 	while count < target.count {
 		push(target[count])
 		count += 1
