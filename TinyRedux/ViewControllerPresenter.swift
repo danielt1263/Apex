@@ -9,11 +9,16 @@
 import UIKit
 
 
+// Logic
+public typealias ViewControllerPresenterState = [String]
+
+// Implementation
+
 public typealias ViewControllerFactory = [String: () -> UIViewController]
 
-public final class ViewControllerPresenter<State, Store: ObservableStore> where Store.State == State {
+public final class ViewControllerPresenter<Store: ObservableStore> {
 
-	public init(rootViewController: UIViewController, factory: ViewControllerFactory, store: Store, lens: @escaping (State) -> [String]) {
+	public init(rootViewController: UIViewController, factory: ViewControllerFactory, store: Store, lens: @escaping (Store.State) -> ViewControllerPresenterState) {
 		self.factory = factory
 		self.rootViewController = rootViewController
 		unsubscriber = store.subscribe(observer: { [weak self] presentationStack in
@@ -21,7 +26,7 @@ public final class ViewControllerPresenter<State, Store: ObservableStore> where 
 		}, lens: lens)
 	}
 
-	func configure(from presentationStack: [String]) {
+	func configure(from presentationStack: ViewControllerPresenterState) {
 		queue.async {
 			let semaphore = DispatchSemaphore(value: 0)
 

@@ -8,16 +8,27 @@
 
 import Foundation
 
-
+// Logic
 public
-enum URLResponseAction: Action {
+enum URLRequesterEvent: Event {
 	case success(data: Data, response: URLResponse)
 	case failure(error: Error, response: URLResponse)
+
+	public
+	var response: URLResponse {
+		switch self {
+		case .success(let (_, response)), .failure(let (_, response)):
+			return response
+		}
+	}
 }
 
+public typealias URLRequesterState = Set<URLRequest>
+
+// Implementation
 public final class URLRequester<State> {
 
-	public init(store: Store<State>, lens: @escaping (State) -> Set<URLRequest>) {
+	public init(store: Store<State>, lens: @escaping (State) -> URLRequesterState) {
 		self.store = store
 		unsubscribe = store.subscribe { [weak self] state in
 			let requests = lens(state)
@@ -25,7 +36,7 @@ public final class URLRequester<State> {
 		}
 	}
 
-	private func configure(using target: Set<URLRequest>) {
+	private func configure(using target: URLRequesterState) {
 		cancelLaunch(current: Set(current.keys), target: target, cancel: self.cancel, launch: self.launch)
 	}
 
@@ -41,10 +52,10 @@ public final class URLRequester<State> {
 			guard let response = response else { return }
 			DispatchQueue.main.async {
 				if let data = data {
-					self.store.dispatch(action: URLResponseAction.success(data: data, response: response))
+					self.store.dispatch(event: URLRequesterEvent.success(data: data, response: response))
 				}
 				if let error = error {
-					self.store.dispatch(action: URLResponseAction.failure(error: error, response: response))
+					self.store.dispatch(event: URLRequesterEvent.failure(error: error, response: response))
 				}
 			}
 		}
