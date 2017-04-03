@@ -9,63 +9,63 @@
 import UIKit
 
 
-// Logic
-public typealias ViewControllerPresenterState = [String]
+public final class ViewControllerPresenter<State, ViewControllerID: Hashable> {
 
-// Implementation
+	public typealias ViewControllerPresenterState = [ViewControllerID]
 
-public typealias ViewControllerFactory = [String: () -> UIViewController]
-
-public final class ViewControllerPresenter<Store: ObservableStore> {
-
-	public init(rootViewController: UIViewController, factory: ViewControllerFactory, store: Store, lens: @escaping (Store.State) -> ViewControllerPresenterState) {
+	public init(rootViewController: UIViewController, factory: [ViewControllerID: (State) -> UIViewController], store: Store<State>, lens: @escaping (State) -> ViewControllerPresenterState) {
 		self.factory = factory
+		self.lens = lens
 		self.rootViewController = rootViewController
-		unsubscriber = store.subscribe(observer: { [weak self] presentationStack in
-			self?.configure(from: presentationStack)
-		}, lens: lens)
+		unsubscriber = store.subscribe(observer: { [weak self] state in
+			self?.configure(using: state)
+		})
 	}
 
-	func configure(from presentationStack: ViewControllerPresenterState) {
-		queue.async {
-			let semaphore = DispatchSemaphore(value: 0)
+	private var unsubscriber: Unsubscriber?
+	private var currentStack: [ViewControllerID] = []
+	private var viewControllers: [ViewControllerID: WeakBox<UIViewController>] = [:]
+	private let queue = DispatchQueue(label: "view_controller_presenter")
+	private let factory: [ViewControllerID: (State) -> UIViewController]
+	private let lens: (State) -> ViewControllerPresenterState
+	private let rootViewController: UIViewController
 
-			func pop(id: String) {
-				let top = topViewController()
-				guard self.viewControllers.values.contains(where: { $0.value == top }) else { return }
-				assert(top != self.rootViewController, "Can't dismiss the root view controller. Did you forget fill in the alert IDs?")
-				DispatchQueue.main.async {
-					top.dismiss(animated: true, completion: {
-						semaphore.signal()
-					})
-				}
-				semaphore.wait()
-			}
-			
-			func push(id: String) {
-				guard let vc = self.factory[id]?() else { fatalError("can't construct view controller \(id)") }
-				self.viewControllers[id] = WeakBox(value: vc)
-				let top = topViewController()
-				DispatchQueue.main.async {
-					top.present(vc, animated: true, completion: {
-						semaphore.signal()
-					})
-				}
-				semaphore.wait()
-			}
-			
+	private func configure(using state: State) {
+		let presentationStack = lens(state)
+		queue.async {
 			self.cull()
-			popPush(current: self.currentStack, target: presentationStack, pop: pop, push: push)
+			popPush(current: self.currentStack, target: presentationStack, pop: self.pop, push: self.push(state: state))
 			self.currentStack = presentationStack
 		}
 	}
 
-	private var unsubscriber: Unsubscriber? = nil
-	private var currentStack: [String] = []
-	private var viewControllers: [String: WeakBox<UIViewController>] = [:]
-	private let queue = DispatchQueue(label: "view_controller_presenter")
-	private let factory: ViewControllerFactory
-	private let rootViewController: UIViewController
+	private func pop(id: ViewControllerID) -> Void {
+		let semaphore = DispatchSemaphore(value: 0)
+		let top = topViewController()
+		guard self.viewControllers.values.contains(where: { $0.value == top }) else { return }
+		assert(top != self.rootViewController, "Can't dismiss the root view controller. Did you forget fill in the alert IDs?")
+		DispatchQueue.main.async {
+			top.dismiss(animated: true, completion: {
+				semaphore.signal()
+			})
+		}
+		semaphore.wait()
+	}
+
+	private func push(state: State) -> (ViewControllerID) -> Void {
+		return { id in
+			let semaphore = DispatchSemaphore(value: 0)
+			guard let vc = self.factory[id]?(state) else { fatalError("can't construct view controller \(id)") }
+			self.viewControllers[id] = WeakBox(value: vc)
+			let top = topViewController()
+			DispatchQueue.main.async {
+				top.present(vc, animated: true, completion: {
+					semaphore.signal()
+				})
+			}
+			semaphore.wait()
+		}
+	}
 
 	private func cull() {
 		for (key, box) in viewControllers {
@@ -82,13 +82,13 @@ public final class ViewControllerPresenter<Store: ObservableStore> {
 
 protocol ReferenceObject: class { }
 
-struct WeakBox<T> where T: ReferenceObject {
+private struct WeakBox<T> where T: ReferenceObject {
 	weak var value: T?
 }
 
 extension UIViewController: ReferenceObject { }
 
-func topViewController() -> UIViewController {
+private func topViewController() -> UIViewController {
 	guard let rootViewController = UIApplication.shared.delegate?.window??.rootViewController else { fatalError("No view controller present in app?") }
 	var result = rootViewController
 	while let vc = result.presentedViewController {

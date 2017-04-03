@@ -8,6 +8,7 @@
 
 import Foundation
 
+
 // Logic
 public
 enum URLRequesterEvent: Event {
@@ -25,6 +26,7 @@ enum URLRequesterEvent: Event {
 
 public typealias URLRequesterState = Set<URLRequest>
 
+
 // Implementation
 public final class URLRequester<State> {
 
@@ -35,6 +37,10 @@ public final class URLRequester<State> {
 			self?.configure(using: requests)
 		}
 	}
+
+	private let store: Store<State>
+	private var unsubscribe: Unsubscriber?
+	private var current: [URLRequest: URLSessionTask] = [:]
 
 	private func configure(using target: URLRequesterState) {
 		cancelLaunch(current: Set(current.keys), target: target, cancel: self.cancel, launch: self.launch)
@@ -63,9 +69,6 @@ public final class URLRequester<State> {
 		dataTask.resume()
 	}
 
-	let store: Store<State>
-	var unsubscribe: Unsubscriber?
-	var current: [URLRequest: URLSessionTask] = [:]
 }
 
 public func cancelLaunch<T>(current: Set<T>, target: Set<T>, cancel: (T) -> Void, launch: (T) -> Void) {

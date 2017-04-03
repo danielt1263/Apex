@@ -10,12 +10,11 @@
 		0905696C1E79C5DD00C3A4A8 /* TinyRedux.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 090569621E79C5DC00C3A4A8 /* TinyRedux.framework */; };
 		090569711E79C5DD00C3A4A8 /* TinyReduxTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 090569701E79C5DD00C3A4A8 /* TinyReduxTests.swift */; };
 		090569731E79C5DD00C3A4A8 /* TinyRedux.h in Headers */ = {isa = PBXBuildFile; fileRef = 090569651E79C5DC00C3A4A8 /* TinyRedux.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		0905697E1E79C60600C3A4A8 /* Store.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0905697C1E79C60600C3A4A8 /* Store.swift */; };
-		0905697F1E79C60600C3A4A8 /* ViewControllerPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0905697D1E79C60600C3A4A8 /* ViewControllerPresenter.swift */; };
-		090569811E79C76800C3A4A8 /* ObservableStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 090569801E79C76800C3A4A8 /* ObservableStore.swift */; };
-		0991F6191E89BC5500780757 /* URLRequester.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0991F6181E89BC5500780757 /* URLRequester.swift */; };
+		09C5D8011E92F3E100305F5C /* Store.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09C5D7FD1E92F3E100305F5C /* Store.swift */; };
+		09C5D8021E92F3E100305F5C /* URLRequester.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09C5D7FE1E92F3E100305F5C /* URLRequester.swift */; };
+		09C5D8031E92F3E100305F5C /* ViewControllerPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09C5D7FF1E92F3E100305F5C /* ViewControllerPresenter.swift */; };
+		09C5D8041E92F3E100305F5C /* PopPushAlgorithm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09C5D8001E92F3E100305F5C /* PopPushAlgorithm.swift */; };
 		721C62EB1E7D51B40047A914 /* PopPushTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 721C62EA1E7D51B40047A914 /* PopPushTests.swift */; };
-		721C62ED1E7D535D0047A914 /* PopPushAlgorithm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 721C62EC1E7D535D0047A914 /* PopPushAlgorithm.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -35,12 +34,11 @@
 		0905696B1E79C5DD00C3A4A8 /* TinyReduxTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TinyReduxTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		090569701E79C5DD00C3A4A8 /* TinyReduxTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TinyReduxTests.swift; sourceTree = "<group>"; };
 		090569721E79C5DD00C3A4A8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		0905697C1E79C60600C3A4A8 /* Store.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Store.swift; sourceTree = "<group>"; };
-		0905697D1E79C60600C3A4A8 /* ViewControllerPresenter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewControllerPresenter.swift; sourceTree = "<group>"; };
-		090569801E79C76800C3A4A8 /* ObservableStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ObservableStore.swift; sourceTree = "<group>"; };
-		0991F6181E89BC5500780757 /* URLRequester.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = URLRequester.swift; sourceTree = "<group>"; };
+		09C5D7FD1E92F3E100305F5C /* Store.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Store.swift; sourceTree = "<group>"; };
+		09C5D7FE1E92F3E100305F5C /* URLRequester.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = URLRequester.swift; sourceTree = "<group>"; };
+		09C5D7FF1E92F3E100305F5C /* ViewControllerPresenter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewControllerPresenter.swift; sourceTree = "<group>"; };
+		09C5D8001E92F3E100305F5C /* PopPushAlgorithm.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PopPushAlgorithm.swift; sourceTree = "<group>"; };
 		721C62EA1E7D51B40047A914 /* PopPushTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PopPushTests.swift; sourceTree = "<group>"; };
-		721C62EC1E7D535D0047A914 /* PopPushAlgorithm.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PopPushAlgorithm.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -83,12 +81,11 @@
 		090569641E79C5DC00C3A4A8 /* TinyRedux */ = {
 			isa = PBXGroup;
 			children = (
+				09C5D7FD1E92F3E100305F5C /* Store.swift */,
+				09C5D7FE1E92F3E100305F5C /* URLRequester.swift */,
+				09C5D7FF1E92F3E100305F5C /* ViewControllerPresenter.swift */,
+				09C5D8001E92F3E100305F5C /* PopPushAlgorithm.swift */,
 				090569651E79C5DC00C3A4A8 /* TinyRedux.h */,
-				090569801E79C76800C3A4A8 /* ObservableStore.swift */,
-				0905697C1E79C60600C3A4A8 /* Store.swift */,
-				0905697D1E79C60600C3A4A8 /* ViewControllerPresenter.swift */,
-				0991F6181E89BC5500780757 /* URLRequester.swift */,
-				721C62EC1E7D535D0047A914 /* PopPushAlgorithm.swift */,
 				090569661E79C5DC00C3A4A8 /* Info.plist */,
 			);
 			path = TinyRedux;
@@ -167,7 +164,7 @@
 					090569611E79C5DC00C3A4A8 = {
 						CreatedOnToolsVersion = 8.2.1;
 						DevelopmentTeam = XA4HQLH76F;
-						LastSwiftMigration = 0820;
+						LastSwiftMigration = 0830;
 						ProvisioningStyle = Automatic;
 					};
 					0905696A1E79C5DD00C3A4A8 = {
@@ -217,11 +214,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0991F6191E89BC5500780757 /* URLRequester.swift in Sources */,
-				0905697E1E79C60600C3A4A8 /* Store.swift in Sources */,
-				0905697F1E79C60600C3A4A8 /* ViewControllerPresenter.swift in Sources */,
-				090569811E79C76800C3A4A8 /* ObservableStore.swift in Sources */,
-				721C62ED1E7D535D0047A914 /* PopPushAlgorithm.swift in Sources */,
+				09C5D8031E92F3E100305F5C /* ViewControllerPresenter.swift in Sources */,
+				09C5D8021E92F3E100305F5C /* URLRequester.swift in Sources */,
+				09C5D8011E92F3E100305F5C /* Store.swift in Sources */,
+				09C5D8041E92F3E100305F5C /* PopPushAlgorithm.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
