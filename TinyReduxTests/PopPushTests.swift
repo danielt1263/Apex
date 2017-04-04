@@ -10,6 +10,15 @@ import XCTest
 @testable import TinyRedux
 
 
+struct PushPopResult: Equatable {
+	let id: String
+	let isLast: Bool
+
+	static func ==(lhs: PushPopResult, rhs: PushPopResult) -> Bool {
+		return lhs.id == rhs.id && lhs.isLast == rhs.isLast
+	}
+}
+
 class PopPushTests: XCTestCase {
 
 	override func setUp() {
@@ -18,10 +27,10 @@ class PopPushTests: XCTestCase {
 		pushed = []
 	}
 	
-	var popped: [String] = []
-	func pop(s: String) { popped.append(s) }
-	var pushed: [String] = []
-	func push(s: String) { pushed.append(s) }
+	var popped: [PushPopResult] = []
+	func pop(s: String, isLast: Bool) { popped.append(PushPopResult(id: s, isLast: isLast)) }
+	var pushed: [PushPopResult] = []
+	func push(s: String, isLast: Bool) { pushed.append(PushPopResult(id: s, isLast: isLast)) }
 	
 	func testPushOne() {
 		let array1: [String] = []
@@ -30,7 +39,7 @@ class PopPushTests: XCTestCase {
 		popPush(current: array1, target: array2, pop: pop, push: push)
 		
 		XCTAssertEqual(popped, [])
-		XCTAssertEqual(pushed, array2)
+		XCTAssertEqual(pushed, [PushPopResult(id: "first", isLast: true)])
 	}
 
 	func testPopOne() {
@@ -39,7 +48,7 @@ class PopPushTests: XCTestCase {
 		
 		popPush(current: array1, target: array2, pop: pop, push: push)
 		
-		XCTAssertEqual(popped, ["first"])
+		XCTAssertEqual(popped, [PushPopResult(id: "first", isLast: true)])
 		XCTAssertEqual(pushed, [])
 	}
 
@@ -59,8 +68,8 @@ class PopPushTests: XCTestCase {
 		
 		popPush(current: array1, target: array2, pop: pop, push: push)
 		
-		XCTAssertEqual(popped, ["first"])
-		XCTAssertEqual(pushed, ["second"])
+		XCTAssertEqual(popped, [PushPopResult(id: "first", isLast: false)])
+		XCTAssertEqual(pushed, [PushPopResult(id: "second", isLast: true)])
 	}
 
 	func testPushTwo() {
@@ -70,7 +79,7 @@ class PopPushTests: XCTestCase {
 		popPush(current: array1, target: array2, pop: pop, push: push)
 		
 		XCTAssertEqual(popped, [])
-		XCTAssertEqual(pushed, ["first", "second"])
+		XCTAssertEqual(pushed, [PushPopResult(id: "first", isLast: false), PushPopResult(id: "second", isLast: true)])
 	}
 	
 	func testPopTwo() {
@@ -79,8 +88,8 @@ class PopPushTests: XCTestCase {
 		
 		popPush(current: array1, target: array2, pop: pop, push: push)
 		
-		XCTAssertEqual(popped, ["second", "first"])
-		XCTAssertEqual(pushed, array2)
+		XCTAssertEqual(popped, [PushPopResult(id: "second", isLast: false), PushPopResult(id: "first", isLast: true)])
+		XCTAssertEqual(pushed, [])
 	}
 	
 	func testPopSecond() {
@@ -89,7 +98,7 @@ class PopPushTests: XCTestCase {
 		
 		popPush(current: array1, target: array2, pop: pop, push: push)
 		
-		XCTAssertEqual(popped, ["second"])
+		XCTAssertEqual(popped, [PushPopResult(id: "second", isLast: true)])
 		XCTAssertEqual(pushed, [])
 	}
 	
@@ -100,7 +109,7 @@ class PopPushTests: XCTestCase {
 		popPush(current: array1, target: array2, pop: pop, push: push)
 		
 		XCTAssertEqual(popped, [])
-		XCTAssertEqual(pushed, ["second"])
+		XCTAssertEqual(pushed, [PushPopResult(id: "second", isLast: true)])
 	}
 	
 }
