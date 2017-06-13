@@ -39,27 +39,27 @@ public final class ViewControllerPresenter<State, ViewControllerID: Hashable> {
 		}
 	}
 
-	private func pop(id: ViewControllerID) -> Void {
+	private func pop(id: ViewControllerID, isLast: Bool) -> Void {
 		let semaphore = DispatchSemaphore(value: 0)
 		let top = topViewController()
 		guard self.viewControllers.values.contains(where: { $0.value == top }) else { return }
 		assert(top != self.rootViewController, "Can't dismiss the root view controller. Did you forget fill in the alert IDs?")
 		DispatchQueue.main.async {
-			top.dismiss(animated: true, completion: {
+			top.dismiss(animated: isLast, completion: {
 				semaphore.signal()
 			})
 		}
 		semaphore.wait()
 	}
 
-	private func push(state: State) -> (ViewControllerID) -> Void {
-		return { id in
+	private func push(state: State) -> (ViewControllerID, Bool) -> Void {
+		return { id, isLast in
 			let semaphore = DispatchSemaphore(value: 0)
 			guard let vc = self.factory[id]?(state) else { fatalError("can't construct view controller \(id)") }
 			self.viewControllers[id] = WeakBox(value: vc)
 			let top = topViewController()
 			DispatchQueue.main.async {
-				top.present(vc, animated: true, completion: {
+				top.present(vc, animated: isLast, completion: {
 					semaphore.signal()
 				})
 			}
