@@ -1,6 +1,6 @@
 //
 //  URLRequester.swift
-//  Marksman 2
+//  TinyRedux
 //
 //  Created by Daniel Tartaglia on 3/23/17.
 //  Copyright © 2017 Daniel Tartaglia. All rights reserved.
@@ -9,17 +9,19 @@
 import Foundation
 
 
-// Logic
+/// Logic
 public
 enum URLRequesterEvent: Event {
-	case success(data: Data, response: URLResponse)
-	case failure(error: Error, response: URLResponse)
-
+	case success(request: URLRequest, data: Data, response: URLResponse)
+	case failure(request: URLRequest, error: Error)
+	
 	public
-	var response: URLResponse {
+	var request: URLRequest {
 		switch self {
-		case .success(let (_, response)), .failure(let (_, response)):
-			return response
+		case .success(let (request, _, _)):
+			return request
+		case .failure(let (request, _)):
+			return request
 		}
 	}
 }
@@ -27,19 +29,21 @@ enum URLRequesterEvent: Event {
 public typealias URLRequesterState = Set<URLRequest>
 
 
-// Implementation
+/// Implementation
 public final class URLRequester<State> {
 
-	public init(store: Store<State>, lens: @escaping (State) -> URLRequesterState) {
+	public init(session: URLSession = URLSession.shared, store: Store<State>, lens: @escaping (State) -> URLRequesterState) {
+		self.session = session
 		self.store = store
-		unsubscribe = store.subscribe { [weak self] state in
-			let requests = lens(state)
-			self?.configure(using: requests)
+		unsubscriber = store.subscribe { [weak self] (state) in
+			let requesterState = lens(state)
+			self?.configure(using: requesterState)
 		}
 	}
 
+	private let session: URLSession
 	private let store: Store<State>
-	private var unsubscribe: Unsubscriber?
+	private var unsubscriber: Unsubscriber?
 	private var current: [URLRequest: URLSessionTask] = [:]
 
 	private func configure(using target: URLRequesterState) {
@@ -54,21 +58,19 @@ public final class URLRequester<State> {
 	}
 
 	private func launch(request: URLRequest) {
-		let dataTask = URLSession.shared.dataTask(with: request) { (data, response, error) in
-			guard let response = response else { return }
+		let dataTask = session.dataTask(with: request) { (data, response, error) in
 			DispatchQueue.main.async {
-				if let data = data {
-					self.store.dispatch(event: URLRequesterEvent.success(data: data, response: response))
+				if let data = data, let response = response {
+					self.store.dispatch(event: URLRequesterEvent.success(request: request, data: data, response: response))
 				}
 				if let error = error {
-					self.store.dispatch(event: URLRequesterEvent.failure(error: error, response: response))
+					self.store.dispatch(event: URLRequesterEvent.failure(request: request, error: error))
 				}
 			}
 		}
 		current[request] = dataTask
 		dataTask.resume()
 	}
-
 }
 
 public func cancelLaunch<T>(current: Set<T>, target: Set<T>, cancel: (T) -> Void, launch: (T) -> Void) {
