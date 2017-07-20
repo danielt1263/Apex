@@ -19,7 +19,7 @@ public final class Store<State> {
 	public init(state: State, reducer: @escaping Reducer, middleware: [Middleware] = []) {
 		self.state = state
 		reduce = reducer
-		dispatcher = middleware.reversed().reduce(self._dispatch) { result, middleware -> Dispatcher in
+		dispatcher = middleware.reversed().reduce(self._dispatch) { result, middleware in
 			return middleware(self.dispatch, self.state, result)
 		}
 	}
