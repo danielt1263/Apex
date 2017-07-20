@@ -7,13 +7,13 @@
 //
 
 
-public protocol Event { }
+public protocol Action { }
 
 public final class Store<State> {
 
-	public typealias Reducer = (State, Event) -> State
+	public typealias Reducer = (State, Action) -> State
 	public typealias Observer = (State) -> Void
-	public typealias Dispatcher = (Event) -> Void
+	public typealias Dispatcher = (Action) -> Void
 	public typealias Middleware = (_ dispatcher: @escaping Dispatcher, _ state: @autoclosure @escaping () -> State, _ next: @escaping Dispatcher) -> Dispatcher
 
 	public init(state: State, reducer: @escaping Reducer, middleware: [Middleware] = []) {
@@ -24,8 +24,8 @@ public final class Store<State> {
 		}
 	}
 
-	public func dispatch(event: Event) {
-		self.dispatcher(event)
+	public func dispatch(action: Action) {
+		self.dispatcher(action)
 	}
 
 	public func subscribe(observer: @escaping Observer) -> Unsubscriber {
@@ -48,10 +48,10 @@ public final class Store<State> {
 	private var subscribers: [UUID: Observer] = [:]
 	private var dispatcher: Dispatcher = { _ in fatalError() }
 
-	private func _dispatch(event: Event) {
+	private func _dispatch(action: Action) {
 		guard !isDispatching else { fatalError("Cannot dispatch in the middle of a dispatch") }
 		isDispatching = true
-		state = reduce(state, event)
+		state = reduce(state, action)
 		for subscriber in subscribers.values {
 			subscriber(state)
 		}

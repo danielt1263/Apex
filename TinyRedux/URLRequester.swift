@@ -11,7 +11,7 @@ import Foundation
 
 /// Logic
 public
-enum URLRequesterEvent: Event {
+enum URLRequesterEvent: Action {
 	case success(request: URLRequest, data: Data, response: URLResponse)
 	case failure(request: URLRequest, error: Error)
 	
@@ -61,10 +61,10 @@ public final class URLRequester<State> {
 		let dataTask = session.dataTask(with: request) { (data, response, error) in
 			DispatchQueue.main.async {
 				if let data = data, let response = response {
-					self.store.dispatch(event: URLRequesterEvent.success(request: request, data: data, response: response))
+					self.store.dispatch(action: URLRequesterEvent.success(request: request, data: data, response: response))
 				}
 				if let error = error {
-					self.store.dispatch(event: URLRequesterEvent.failure(request: request, error: error))
+					self.store.dispatch(action: URLRequesterEvent.failure(request: request, error: error))
 				}
 			}
 		}
