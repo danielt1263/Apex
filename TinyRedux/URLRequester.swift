@@ -28,56 +28,51 @@ enum URLRequesterEvent: Action {
 
 public typealias URLRequesterState = Set<URLRequest>
 
+class URLRequestCommand: Command {
+	
+	init(request: URLRequest, session: URLSession = URLSession.shared) {
+		self.request = request
+		self.session = session
+	}
+
+	func cancel() {
+		dataTask?.cancel()
+		dataTask = nil
+	}
+	
+	func launch(dispatcher: @escaping Dispatcher) {
+		dataTask = session.dataTask(with: request) { (data, response, error) in
+			DispatchQueue.main.async {
+				if let data = data, let response = response {
+					dispatcher(URLRequesterEvent.success(request: self.request, data: data, response: response))
+				}
+				if let error = error {
+					dispatcher(URLRequesterEvent.failure(request: self.request, error: error))
+				}
+			}
+		}
+		dataTask?.resume()
+	}
+	
+	var hashValue: Int { return request.hashValue }
+	
+	static func ==(lhs: URLRequestCommand, rhs: URLRequestCommand) -> Bool {
+		return lhs.session == rhs.session
+	}
+	
+	private let session: URLSession
+	private let request: URLRequest
+	private var dataTask: URLSessionDataTask?
+}
 
 /// Implementation
 public final class URLRequester<State> {
 
 	public init(session: URLSession = URLSession.shared, store: Store<State>, lens: @escaping (State) -> URLRequesterState) {
-		self.session = session
-		self.store = store
-		unsubscriber = store.subscribe { [weak self] (state) in
-			let requesterState = lens(state)
-			self?.configure(using: requesterState)
-		}
+		let commandLens = { Set(lens($0).map({ AnyCommand(URLRequestCommand(request: $0, session: session)) })) }
+		
+		self.commandManager = CommandManager(store: store, lens: commandLens)
 	}
 
-	private let session: URLSession
-	private let store: Store<State>
-	private var unsubscriber: Unsubscriber?
-	private var current: [URLRequest: URLSessionTask] = [:]
-
-	private func configure(using target: URLRequesterState) {
-		cancelLaunch(current: Set(current.keys), target: target, cancel: self.cancel, launch: self.launch)
-	}
-
-	private func cancel(request: URLRequest) {
-		if let dataTask = current[request] {
-			dataTask.cancel()
-			current.removeValue(forKey: request)
-		}
-	}
-
-	private func launch(request: URLRequest) {
-		let dataTask = session.dataTask(with: request) { (data, response, error) in
-			DispatchQueue.main.async {
-				if let data = data, let response = response {
-					self.store.dispatch(action: URLRequesterEvent.success(request: request, data: data, response: response))
-				}
-				if let error = error {
-					self.store.dispatch(action: URLRequesterEvent.failure(request: request, error: error))
-				}
-			}
-		}
-		current[request] = dataTask
-		dataTask.resume()
-	}
-}
-
-public func cancelLaunch<T>(current: Set<T>, target: Set<T>, cancel: (T) -> Void, launch: (T) -> Void) {
-	for each in current.subtracting(target) {
-		cancel(each)
-	}
-	for each in target.subtracting(current) {
-		launch(each)
-	}
+	private let commandManager: CommandManager<State>
 }
