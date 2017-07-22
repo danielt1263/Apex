@@ -7,9 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		0905696C1E79C5DD00C3A4A8 /* TinyRedux.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 090569621E79C5DC00C3A4A8 /* TinyRedux.framework */; };
-		090569711E79C5DD00C3A4A8 /* TinyReduxTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 090569701E79C5DD00C3A4A8 /* TinyReduxTests.swift */; };
-		090569731E79C5DD00C3A4A8 /* TinyRedux.h in Headers */ = {isa = PBXBuildFile; fileRef = 090569651E79C5DC00C3A4A8 /* TinyRedux.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		0905696C1E79C5DD00C3A4A8 /* Apex.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 090569621E79C5DC00C3A4A8 /* Apex.framework */; };
+		090569711E79C5DD00C3A4A8 /* ApexTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 090569701E79C5DD00C3A4A8 /* ApexTests.swift */; };
+		090569731E79C5DD00C3A4A8 /* Apex.h in Headers */ = {isa = PBXBuildFile; fileRef = 090569651E79C5DC00C3A4A8 /* Apex.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		09C5D8011E92F3E100305F5C /* Store.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09C5D7FD1E92F3E100305F5C /* Store.swift */; };
 		09C5D8021E92F3E100305F5C /* URLRequester.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09C5D7FE1E92F3E100305F5C /* URLRequester.swift */; };
 		09C5D8031E92F3E100305F5C /* ViewControllerPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09C5D7FF1E92F3E100305F5C /* ViewControllerPresenter.swift */; };
@@ -24,16 +24,16 @@
 			containerPortal = 090569591E79C5DC00C3A4A8 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = 090569611E79C5DC00C3A4A8;
-			remoteInfo = TinyRedux;
+			remoteInfo = Apex;
 		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		090569621E79C5DC00C3A4A8 /* TinyRedux.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = TinyRedux.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		090569651E79C5DC00C3A4A8 /* TinyRedux.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TinyRedux.h; sourceTree = "<group>"; };
+		090569621E79C5DC00C3A4A8 /* Apex.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Apex.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		090569651E79C5DC00C3A4A8 /* Apex.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Apex.h; sourceTree = "<group>"; };
 		090569661E79C5DC00C3A4A8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		0905696B1E79C5DD00C3A4A8 /* TinyReduxTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TinyReduxTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		090569701E79C5DD00C3A4A8 /* TinyReduxTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TinyReduxTests.swift; sourceTree = "<group>"; };
+		0905696B1E79C5DD00C3A4A8 /* ApexTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ApexTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		090569701E79C5DD00C3A4A8 /* ApexTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApexTests.swift; sourceTree = "<group>"; };
 		090569721E79C5DD00C3A4A8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		09C5D7FD1E92F3E100305F5C /* Store.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Store.swift; sourceTree = "<group>"; };
 		09C5D7FE1E92F3E100305F5C /* URLRequester.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = URLRequester.swift; sourceTree = "<group>"; };
@@ -55,7 +55,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0905696C1E79C5DD00C3A4A8 /* TinyRedux.framework in Frameworks */,
+				0905696C1E79C5DD00C3A4A8 /* Apex.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -65,8 +65,8 @@
 		090569581E79C5DC00C3A4A8 = {
 			isa = PBXGroup;
 			children = (
-				090569641E79C5DC00C3A4A8 /* TinyRedux */,
-				0905696F1E79C5DD00C3A4A8 /* TinyReduxTests */,
+				090569641E79C5DC00C3A4A8 /* Apex */,
+				0905696F1E79C5DD00C3A4A8 /* ApexTests */,
 				090569631E79C5DC00C3A4A8 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -74,13 +74,13 @@
 		090569631E79C5DC00C3A4A8 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				090569621E79C5DC00C3A4A8 /* TinyRedux.framework */,
-				0905696B1E79C5DD00C3A4A8 /* TinyReduxTests.xctest */,
+				090569621E79C5DC00C3A4A8 /* Apex.framework */,
+				0905696B1E79C5DD00C3A4A8 /* ApexTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		090569641E79C5DC00C3A4A8 /* TinyRedux */ = {
+		090569641E79C5DC00C3A4A8 /* Apex */ = {
 			isa = PBXGroup;
 			children = (
 				09C5D7FD1E92F3E100305F5C /* Store.swift */,
@@ -88,20 +88,20 @@
 				72B1934F1F23A3790039D476 /* CommandManager.swift */,
 				09C5D7FF1E92F3E100305F5C /* ViewControllerPresenter.swift */,
 				09C5D8001E92F3E100305F5C /* PopPushAlgorithm.swift */,
-				090569651E79C5DC00C3A4A8 /* TinyRedux.h */,
+				090569651E79C5DC00C3A4A8 /* Apex.h */,
 				090569661E79C5DC00C3A4A8 /* Info.plist */,
 			);
-			path = TinyRedux;
+			path = Apex;
 			sourceTree = "<group>";
 		};
-		0905696F1E79C5DD00C3A4A8 /* TinyReduxTests */ = {
+		0905696F1E79C5DD00C3A4A8 /* ApexTests */ = {
 			isa = PBXGroup;
 			children = (
-				090569701E79C5DD00C3A4A8 /* TinyReduxTests.swift */,
+				090569701E79C5DD00C3A4A8 /* ApexTests.swift */,
 				721C62EA1E7D51B40047A914 /* PopPushTests.swift */,
 				090569721E79C5DD00C3A4A8 /* Info.plist */,
 			);
-			path = TinyReduxTests;
+			path = ApexTests;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -111,16 +111,16 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				090569731E79C5DD00C3A4A8 /* TinyRedux.h in Headers */,
+				090569731E79C5DD00C3A4A8 /* Apex.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
-		090569611E79C5DC00C3A4A8 /* TinyRedux */ = {
+		090569611E79C5DC00C3A4A8 /* Apex */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 090569761E79C5DD00C3A4A8 /* Build configuration list for PBXNativeTarget "TinyRedux" */;
+			buildConfigurationList = 090569761E79C5DD00C3A4A8 /* Build configuration list for PBXNativeTarget "Apex" */;
 			buildPhases = (
 				0905695D1E79C5DC00C3A4A8 /* Sources */,
 				0905695E1E79C5DC00C3A4A8 /* Frameworks */,
@@ -131,14 +131,14 @@
 			);
 			dependencies = (
 			);
-			name = TinyRedux;
-			productName = TinyRedux;
-			productReference = 090569621E79C5DC00C3A4A8 /* TinyRedux.framework */;
+			name = Apex;
+			productName = Apex;
+			productReference = 090569621E79C5DC00C3A4A8 /* Apex.framework */;
 			productType = "com.apple.product-type.framework";
 		};
-		0905696A1E79C5DD00C3A4A8 /* TinyReduxTests */ = {
+		0905696A1E79C5DD00C3A4A8 /* ApexTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 090569791E79C5DD00C3A4A8 /* Build configuration list for PBXNativeTarget "TinyReduxTests" */;
+			buildConfigurationList = 090569791E79C5DD00C3A4A8 /* Build configuration list for PBXNativeTarget "ApexTests" */;
 			buildPhases = (
 				090569671E79C5DD00C3A4A8 /* Sources */,
 				090569681E79C5DD00C3A4A8 /* Frameworks */,
@@ -149,9 +149,9 @@
 			dependencies = (
 				0905696E1E79C5DD00C3A4A8 /* PBXTargetDependency */,
 			);
-			name = TinyReduxTests;
-			productName = TinyReduxTests;
-			productReference = 0905696B1E79C5DD00C3A4A8 /* TinyReduxTests.xctest */;
+			name = ApexTests;
+			productName = ApexTests;
+			productReference = 0905696B1E79C5DD00C3A4A8 /* ApexTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
@@ -177,7 +177,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 0905695C1E79C5DC00C3A4A8 /* Build configuration list for PBXProject "TinyRedux" */;
+			buildConfigurationList = 0905695C1E79C5DC00C3A4A8 /* Build configuration list for PBXProject "Apex" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -189,8 +189,8 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				090569611E79C5DC00C3A4A8 /* TinyRedux */,
-				0905696A1E79C5DD00C3A4A8 /* TinyReduxTests */,
+				090569611E79C5DC00C3A4A8 /* Apex */,
+				0905696A1E79C5DD00C3A4A8 /* ApexTests */,
 			);
 		};
 /* End PBXProject section */
@@ -229,7 +229,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				090569711E79C5DD00C3A4A8 /* TinyReduxTests.swift in Sources */,
+				090569711E79C5DD00C3A4A8 /* ApexTests.swift in Sources */,
 				721C62EB1E7D51B40047A914 /* PopPushTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -239,7 +239,7 @@
 /* Begin PBXTargetDependency section */
 		0905696E1E79C5DD00C3A4A8 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 090569611E79C5DC00C3A4A8 /* TinyRedux */;
+			target = 090569611E79C5DC00C3A4A8 /* Apex */;
 			targetProxy = 0905696D1E79C5DD00C3A4A8 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -354,10 +354,10 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = TinyRedux/Info.plist;
+				INFOPLIST_FILE = Apex/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.google.danielt1263.TinyRedux;
+				PRODUCT_BUNDLE_IDENTIFIER = com.google.danielt1263.Apex;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -375,10 +375,10 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = TinyRedux/Info.plist;
+				INFOPLIST_FILE = Apex/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.google.danielt1263.TinyRedux;
+				PRODUCT_BUNDLE_IDENTIFIER = com.google.danielt1263.Apex;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 3.0;
@@ -390,9 +390,9 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				DEVELOPMENT_TEAM = XA4HQLH76F;
-				INFOPLIST_FILE = TinyReduxTests/Info.plist;
+				INFOPLIST_FILE = ApexTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.google.danielt1263.TinyReduxTests;
+				PRODUCT_BUNDLE_IDENTIFIER = com.google.danielt1263.ApexTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 3.0;
 			};
@@ -403,9 +403,9 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				DEVELOPMENT_TEAM = XA4HQLH76F;
-				INFOPLIST_FILE = TinyReduxTests/Info.plist;
+				INFOPLIST_FILE = ApexTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.google.danielt1263.TinyReduxTests;
+				PRODUCT_BUNDLE_IDENTIFIER = com.google.danielt1263.ApexTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 3.0;
 			};
@@ -414,7 +414,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		0905695C1E79C5DC00C3A4A8 /* Build configuration list for PBXProject "TinyRedux" */ = {
+		0905695C1E79C5DC00C3A4A8 /* Build configuration list for PBXProject "Apex" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				090569741E79C5DD00C3A4A8 /* Debug */,
@@ -423,7 +423,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		090569761E79C5DD00C3A4A8 /* Build configuration list for PBXNativeTarget "TinyRedux" */ = {
+		090569761E79C5DD00C3A4A8 /* Build configuration list for PBXNativeTarget "Apex" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				090569771E79C5DD00C3A4A8 /* Debug */,
@@ -432,7 +432,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		090569791E79C5DD00C3A4A8 /* Build configuration list for PBXNativeTarget "TinyReduxTests" */ = {
+		090569791E79C5DD00C3A4A8 /* Build configuration list for PBXNativeTarget "ApexTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				0905697A1E79C5DD00C3A4A8 /* Debug */,

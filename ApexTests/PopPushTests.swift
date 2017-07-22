@@ -1,13 +1,13 @@
 //
 //  PopPushTests.swift
-//  TinyRedux
+//  Apex
 //
 //  Created by Daniel Tartaglia on 3/18/17.
 //  Copyright © 2017 Daniel Tartaglia. All rights reserved.
 //
 
 import XCTest
-@testable import TinyRedux
+@testable import Apex
 
 
 struct PushPopResult: Equatable {

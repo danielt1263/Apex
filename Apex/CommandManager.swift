@@ -1,6 +1,6 @@
 //
 //  CommandManager.swift
-//  TinyRedux
+//  Apex
 //
 //  Created by Daniel Tartaglia on 7/22/17.
 //  Copyright © 2017 Daniel Tartaglia. MIT License.

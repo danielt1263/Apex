@@ -1,6 +1,6 @@
 //
 //  URLRequester.swift
-//  TinyRedux
+//  Apex
 //
 //  Created by Daniel Tartaglia on 3/23/17.
 //  Copyright © 2017 Daniel Tartaglia. MIT License.

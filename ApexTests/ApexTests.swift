@@ -1,15 +1,15 @@
 //
-//  TinyReduxTests.swift
-//  TinyReduxTests
+//  ApexTests.swift
+//  ApexTests
 //
 //  Created by Daniel Tartaglia on 3/15/17.
 //  Copyright © 2017 Daniel Tartaglia. MIT License.
 //
 
 import XCTest
-@testable import TinyRedux
+@testable import Apex
 
-class TinyReduxTests: XCTestCase {
+class ApexTests: XCTestCase {
     
     override func setUp() {
         super.setUp()

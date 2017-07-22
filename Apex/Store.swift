@@ -1,6 +1,6 @@
 //
 //  Store.swift
-//  TinyRedux
+//  Apex
 //
 //  Created by Daniel Tartaglia on 01/16/15.
 //  Copyright © 2017 Daniel Tartaglia. MIT License.
