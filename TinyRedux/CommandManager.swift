@@ -8,8 +8,7 @@
 
 import Foundation
 
-public
-protocol Command: Hashable {
+public protocol Command: Hashable {
 	func cancel()
 	func launch(dispatcher: @escaping Dispatcher)
 }
@@ -45,10 +44,9 @@ public func cancelLaunch<T>(current: Set<T>, target: Set<T>, cancel: (T) -> Void
 	}
 }
 
-public
-struct AnyCommand: Command {
-	public
-	init<C: Command>(_ base: C) {
+public struct AnyCommand: Command {
+	
+	public init<C: Command>(_ base: C) {
 		self.base = base
 		self._hashValue = { base.hashValue }
 		self._equals = {
@@ -61,25 +59,21 @@ struct AnyCommand: Command {
 		self._launch = base.launch
 	}
 
-	let base: Any
-	public
-	var hashValue: Int { return _hashValue() }
+	public var hashValue: Int { return _hashValue() }
 	
-	public
-	func cancel() {
+	public func cancel() {
 		_cancel()
 	}
 	
-	public
-	func launch(dispatcher: @escaping Dispatcher) {
+	public func launch(dispatcher: @escaping Dispatcher) {
 		_launch(dispatcher)
 	}
 	
-	public
-	static func ==(lhs: AnyCommand, rhs: AnyCommand) -> Bool {
+	public static func ==(lhs: AnyCommand, rhs: AnyCommand) -> Bool {
 		return lhs._equals(rhs.base)
 	}
 	
+	private let base: Any
 	private let _hashValue: () -> Int
 	private let _equals: (Any) -> Bool
 	private let _cancel: () -> Void

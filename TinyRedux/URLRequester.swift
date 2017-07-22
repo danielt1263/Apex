@@ -10,8 +10,7 @@ import Foundation
 
 
 /// Logic
-public
-enum URLRequesterEvent: Action {
+public enum URLRequesterEvent: Action {
 	case success(request: URLRequest, data: Data, response: URLResponse)
 	case failure(request: URLRequest, error: Error)
 	
@@ -28,19 +27,19 @@ enum URLRequesterEvent: Action {
 
 public typealias URLRequesterState = Set<URLRequest>
 
-class URLRequestCommand: Command {
+public final class URLRequestCommand: Command {
 	
-	init(request: URLRequest, session: URLSession = URLSession.shared) {
+	public init(request: URLRequest, session: URLSession = URLSession.shared) {
 		self.request = request
 		self.session = session
 	}
 
-	func cancel() {
+	public func cancel() {
 		dataTask?.cancel()
 		dataTask = nil
 	}
 	
-	func launch(dispatcher: @escaping Dispatcher) {
+	public func launch(dispatcher: @escaping Dispatcher) {
 		dataTask = session.dataTask(with: request) { (data, response, error) in
 			DispatchQueue.main.async {
 				if let data = data, let response = response {
@@ -54,9 +53,9 @@ class URLRequestCommand: Command {
 		dataTask?.resume()
 	}
 	
-	var hashValue: Int { return request.hashValue }
+	public var hashValue: Int { return request.hashValue }
 	
-	static func ==(lhs: URLRequestCommand, rhs: URLRequestCommand) -> Bool {
+	public static func ==(lhs: URLRequestCommand, rhs: URLRequestCommand) -> Bool {
 		return lhs.session == rhs.session
 	}
 	
@@ -69,8 +68,9 @@ class URLRequestCommand: Command {
 public final class URLRequester<State> {
 
 	public init(session: URLSession = URLSession.shared, store: Store<State>, lens: @escaping (State) -> URLRequesterState) {
-		let commandLens = { Set(lens($0).map({ AnyCommand(URLRequestCommand(request: $0, session: session)) })) }
-		
+		let commandLens = { state in
+			Set(lens(state).map { AnyCommand(URLRequestCommand(request: $0, session: session)) })
+		}
 		self.commandManager = CommandManager(store: store, lens: commandLens)
 	}
 
