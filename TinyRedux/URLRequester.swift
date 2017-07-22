@@ -3,14 +3,14 @@
 //  TinyRedux
 //
 //  Created by Daniel Tartaglia on 3/23/17.
-//  Copyright © 2017 Daniel Tartaglia. All rights reserved.
+//  Copyright © 2017 Daniel Tartaglia. MIT License.
 //
 
 import Foundation
 
 
 /// Logic
-public enum URLRequesterEvent: Action {
+public enum URLRequesterAction: Action {
 	case success(request: URLRequest, data: Data, response: URLResponse)
 	case failure(request: URLRequest, error: Error)
 	
@@ -43,10 +43,10 @@ public final class URLRequestCommand: Command {
 		dataTask = session.dataTask(with: request) { (data, response, error) in
 			DispatchQueue.main.async {
 				if let data = data, let response = response {
-					dispatcher(URLRequesterEvent.success(request: self.request, data: data, response: response))
+					dispatcher(URLRequesterAction.success(request: self.request, data: data, response: response))
 				}
 				if let error = error {
-					dispatcher(URLRequesterEvent.failure(request: self.request, error: error))
+					dispatcher(URLRequesterAction.failure(request: self.request, error: error))
 				}
 			}
 		}
