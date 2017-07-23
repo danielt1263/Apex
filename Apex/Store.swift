@@ -30,16 +30,12 @@ public final class Store<State> {
 	}
 
 	public func subscribe(observer: @escaping Observer) -> Unsubscriber {
-		return subscribe(observer: observer, lens: { $0 })
-	}
-
-	public func subscribe<T>(observer: @escaping (T) -> Void, lens: @escaping (State) -> T) -> Unsubscriber {
 		let id = UUID()
-		subscribers[id] = { state in observer(lens(state)) }
+		subscribers[id] = { state in observer(state) }
 		let dispose = { [weak self] () -> Void in
 			let _ = self?.subscribers.removeValue(forKey: id)
 		}
-		observer(lens(state))
+		observer(state)
 		return Unsubscriber(method: dispose)
 	}
 

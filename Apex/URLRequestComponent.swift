@@ -1,5 +1,5 @@
 //
-//  URLRequester.swift
+//  URLRequestComponent.swift
 //  Apex
 //
 //  Created by Daniel Tartaglia on 3/23/17.
@@ -9,22 +9,7 @@
 import Foundation
 
 
-/// Logic
-public enum URLRequesterAction: Action {
-	case success(request: URLRequest, data: Data, response: URLResponse)
-	case failure(request: URLRequest, error: Error)
-	
-	public
-	var request: URLRequest {
-		switch self {
-		case .success(let (request, _, _)):
-			return request
-		case .failure(let (request, _)):
-			return request
-		}
-	}
-}
-
+/// State
 public typealias URLRequesterState = Set<URLRequest>
 
 public final class URLRequestCommand: Command {
@@ -33,7 +18,7 @@ public final class URLRequestCommand: Command {
 		self.request = request
 		self.session = session
 	}
-
+	
 	public func cancel() {
 		dataTask?.cancel()
 		dataTask = nil
@@ -64,15 +49,31 @@ public final class URLRequestCommand: Command {
 	private var dataTask: URLSessionDataTask?
 }
 
-/// Implementation
-public final class URLRequester<State> {
+/// Update
+public enum URLRequesterAction: Action {
+	case success(request: URLRequest, data: Data, response: URLResponse)
+	case failure(request: URLRequest, error: Error)
+	
+	public
+	var request: URLRequest {
+		switch self {
+		case .success(let (request, _, _)):
+			return request
+		case .failure(let (request, _)):
+			return request
+		}
+	}
+}
+
+/// Component
+public final class URLRequestComponent<State> {
 
 	public init(session: URLSession = URLSession.shared, store: Store<State>, lens: @escaping (State) -> URLRequesterState) {
 		let commandLens = { state in
 			Set(lens(state).map { AnyCommand(URLRequestCommand(request: $0, session: session)) })
 		}
-		self.commandManager = CommandManager(store: store, lens: commandLens)
+		self.commandManager = CommandComponent(store: store, lens: commandLens)
 	}
 
-	private let commandManager: CommandManager<State>
+	private let commandManager: CommandComponent<State>
 }

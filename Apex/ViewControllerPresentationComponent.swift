@@ -1,5 +1,5 @@
 //
-//  ViewControllerPresenter.swift
+//  ViewControllerPresentationComponent.swift
 //  Apex
 //
 //  Created by Daniel Tartaglia on 3/15/17.
@@ -9,11 +9,9 @@
 import UIKit
 
 
-public final class ViewControllerPresenter<State, ViewControllerID: Hashable> {
+public final class ViewControllerPresentationComponent<State, ViewControllerID: Hashable> {
 
-	public typealias ViewControllerPresenterState = [ViewControllerID]
-
-	public init(rootViewController: UIViewController, factory: [ViewControllerID: (State) -> UIViewController], store: Store<State>, lens: @escaping (State) -> ViewControllerPresenterState) {
+	public init(rootViewController: UIViewController, factory: [ViewControllerID: (State) -> UIViewController], store: Store<State>, lens: @escaping (State) -> [ViewControllerID]) {
 		self.factory = factory
 		self.lens = lens
 		self.rootViewController = rootViewController
@@ -27,7 +25,7 @@ public final class ViewControllerPresenter<State, ViewControllerID: Hashable> {
 	private var viewControllers: [ViewControllerID: WeakBox<UIViewController>] = [:]
 	private let queue = DispatchQueue(label: "view_controller_presenter")
 	private let factory: [ViewControllerID: (State) -> UIViewController]
-	private let lens: (State) -> ViewControllerPresenterState
+	private let lens: (State) -> [ViewControllerID]
 	private let rootViewController: UIViewController
 
 	private func configure(using state: State) {
@@ -55,10 +53,10 @@ public final class ViewControllerPresenter<State, ViewControllerID: Hashable> {
 	private func push(state: State) -> (ViewControllerID, Bool) -> Void {
 		return { id, isLast in
 			let semaphore = DispatchSemaphore(value: 0)
-			guard let vc = self.factory[id]?(state) else { fatalError("can't construct view controller \(id)") }
-			self.viewControllers[id] = WeakBox(value: vc)
-			let top = topViewController()
 			DispatchQueue.main.async {
+				guard let vc = self.factory[id]?(state) else { fatalError("can't construct view controller \(id)") }
+				self.viewControllers[id] = WeakBox(value: vc)
+				let top = topViewController()
 				top.present(vc, animated: isLast, completion: {
 					semaphore.signal()
 				})

@@ -1,5 +1,5 @@
 //
-//  CommandManager.swift
+//  CommandComponent.swift
 //  Apex
 //
 //  Created by Daniel Tartaglia on 7/22/17.
@@ -8,14 +8,52 @@
 
 import Foundation
 
+// State
+public typealias Commands = Set<AnyCommand>
+
 public protocol Command: Hashable {
 	func cancel()
 	func launch(dispatcher: @escaping Dispatcher)
 }
 
-public typealias Commands = Set<AnyCommand>
+public struct AnyCommand: Command {
+	
+	public init<C: Command>(_ base: C) {
+		self.base = base
+		self._hashValue = { base.hashValue }
+		self._equals = {
+			if let other = $0 as? C {
+				return base == other
+			}
+			return false
+		}
+		self._cancel = base.cancel
+		self._launch = base.launch
+	}
+	
+	public var hashValue: Int { return _hashValue() }
+	
+	public func cancel() {
+		_cancel()
+	}
+	
+	public func launch(dispatcher: @escaping Dispatcher) {
+		_launch(dispatcher)
+	}
+	
+	public static func ==(lhs: AnyCommand, rhs: AnyCommand) -> Bool {
+		return lhs._equals(rhs.base)
+	}
+	
+	private let base: Any
+	private let _hashValue: () -> Int
+	private let _equals: (Any) -> Bool
+	private let _cancel: () -> Void
+	private let _launch: (@escaping Dispatcher) -> Void
+}
 
-public final class CommandManager<State> {
+// Component
+public final class CommandComponent<State> {
 	
 	public init(store: Store<State>, lens: @escaping (State) -> Commands) {
 		self.store = store
@@ -42,40 +80,4 @@ public func cancelLaunch<T>(current: Set<T>, target: Set<T>, cancel: (T) -> Void
 	for each in target.subtracting(current) {
 		launch(each)
 	}
-}
-
-public struct AnyCommand: Command {
-	
-	public init<C: Command>(_ base: C) {
-		self.base = base
-		self._hashValue = { base.hashValue }
-		self._equals = {
-			if let other = $0 as? C {
-				return base == other
-			}
-			return false
-		}
-		self._cancel = base.cancel
-		self._launch = base.launch
-	}
-
-	public var hashValue: Int { return _hashValue() }
-	
-	public func cancel() {
-		_cancel()
-	}
-	
-	public func launch(dispatcher: @escaping Dispatcher) {
-		_launch(dispatcher)
-	}
-	
-	public static func ==(lhs: AnyCommand, rhs: AnyCommand) -> Bool {
-		return lhs._equals(rhs.base)
-	}
-	
-	private let base: Any
-	private let _hashValue: () -> Int
-	private let _equals: (Any) -> Bool
-	private let _cancel: () -> Void
-	private let _launch: (@escaping Dispatcher) -> Void
 }
