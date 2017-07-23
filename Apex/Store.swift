@@ -15,13 +15,13 @@ public final class Store<State> {
 
 	public typealias Reducer = (State, Action) -> State
 	public typealias Observer = (State) -> Void
-	public typealias Middleware = (_ dispatcher: @escaping Dispatcher, _ state: @autoclosure @escaping () -> State, _ next: @escaping Dispatcher) -> Dispatcher
+	public typealias Middleware = (_ dispatcher: @escaping Dispatcher, _ state: @escaping () -> State, _ next: @escaping Dispatcher) -> Dispatcher
 
 	public init(state: State, reducer: @escaping Reducer, middleware: [Middleware] = []) {
 		self.state = state
 		reduce = reducer
 		dispatcher = middleware.reversed().reduce(self._dispatch) { result, middleware in
-			return middleware(self.dispatch, self.state, result)
+			return middleware(self.dispatch, { self.state }, result)
 		}
 	}
 
