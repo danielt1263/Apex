@@ -66,14 +66,14 @@ public enum URLRequesterAction: Action {
 }
 
 /// Component
-public final class URLRequestComponent<State> {
+public final class URLRequestComponent {
 
-	public init(session: URLSession = URLSession.shared, store: Store<State>, lens: @escaping (State) -> URLRequesterState) {
+	public init(session: URLSession = URLSession.shared, store: Store, lens: @escaping (State) -> URLRequesterState) {
 		let commandLens = { state in
-			Set(lens(state).map { AnyCommand(URLRequestCommand(request: $0, session: session)) })
+			Set(lens(state).map { URLRequestCommand(request: $0, session: session) })
 		}
 		self.commandManager = CommandComponent(store: store, lens: commandLens)
 	}
 
-	private let commandManager: CommandComponent<State>
+	private let commandManager: CommandComponent<URLRequestCommand>
 }

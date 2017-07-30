@@ -9,24 +9,28 @@
 
 public protocol Action { }
 
+public protocol State {
+	mutating func transition(using: Action)
+}
+
 public typealias Dispatcher = (Action) -> Void
 
-public final class Store<State> {
+public final class Store {
 
-	public typealias Reducer = (State, Action) -> State
 	public typealias Observer = (State) -> Void
-	public typealias Middleware = (_ dispatcher: @escaping Dispatcher, _ state: @escaping () -> State, _ next: @escaping Dispatcher) -> Dispatcher
 
-	public init(state: State, reducer: @escaping Reducer, middleware: [Middleware] = []) {
+	public init(state: State) {
 		self.state = state
-		reduce = reducer
-		dispatcher = middleware.reversed().reduce(self._dispatch) { result, middleware in
-			return middleware(self.dispatch, { self.state }, result)
-		}
 	}
 
 	public func dispatch(action: Action) {
-		self.dispatcher(action)
+		guard !isDispatching else { fatalError("Cannot dispatch in the middle of a dispatch") }
+		isDispatching = true
+		state.transition(using: action)
+		for subscriber in subscribers.values {
+			subscriber(state)
+		}
+		isDispatching = false
 	}
 
 	public func subscribe(observer: @escaping Observer) -> Unsubscriber {
@@ -40,21 +44,8 @@ public final class Store<State> {
 	}
 
 	private var state: State
-	private let reduce: Reducer
 	private var isDispatching = false
 	private var subscribers: [UUID: Observer] = [:]
-	private var dispatcher: Dispatcher = { _ in fatalError() }
-
-	private func _dispatch(action: Action) {
-		guard !isDispatching else { fatalError("Cannot dispatch in the middle of a dispatch") }
-		isDispatching = true
-		state = reduce(state, action)
-		for subscriber in subscribers.values {
-			subscriber(state)
-		}
-		isDispatching = false
-	}
-
 }
 
 public final class Unsubscriber {

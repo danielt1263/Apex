@@ -9,10 +9,13 @@
 import UIKit
 
 
-public final class ViewControllerPresentationComponent<State, ViewControllerID: Hashable> {
+public protocol ViewControllerID: Hashable {
+	func create(state: State) -> UIViewController
+}
 
-	public init(rootViewController: UIViewController, factory: [ViewControllerID: (State) -> UIViewController], store: Store<State>, lens: @escaping (State) -> [ViewControllerID]) {
-		self.factory = factory
+public final class ViewControllerPresentationComponent<ViewController: ViewControllerID> {
+
+	public init(rootViewController: UIViewController, store: Store, lens: @escaping (State) -> [ViewController]) {
 		self.lens = lens
 		self.rootViewController = rootViewController
 		unsubscriber = store.subscribe(observer: { [weak self] state in
@@ -21,11 +24,10 @@ public final class ViewControllerPresentationComponent<State, ViewControllerID: 
 	}
 
 	private var unsubscriber: Unsubscriber?
-	private var currentStack: [ViewControllerID] = []
-	private var viewControllers: [ViewControllerID: WeakBox<UIViewController>] = [:]
+	private var currentStack: [ViewController] = []
+	private var viewControllers: [ViewController: WeakBox<UIViewController>] = [:]
 	private let queue = DispatchQueue(label: "view_controller_presenter")
-	private let factory: [ViewControllerID: (State) -> UIViewController]
-	private let lens: (State) -> [ViewControllerID]
+	private let lens: (State) -> [ViewController]
 	private let rootViewController: UIViewController
 
 	private func configure(using state: State) {
@@ -37,7 +39,7 @@ public final class ViewControllerPresentationComponent<State, ViewControllerID: 
 		}
 	}
 
-	private func pop(id: ViewControllerID, isLast: Bool) -> Void {
+	private func pop(id: ViewController, isLast: Bool) -> Void {
 		let semaphore = DispatchSemaphore(value: 0)
 		let top = topViewController()
 		guard self.viewControllers.values.contains(where: { $0.value == top }) else { return }
@@ -50,11 +52,11 @@ public final class ViewControllerPresentationComponent<State, ViewControllerID: 
 		semaphore.wait()
 	}
 
-	private func push(state: State) -> (ViewControllerID, Bool) -> Void {
+	private func push(state: State) -> (ViewController, Bool) -> Void {
 		return { id, isLast in
 			let semaphore = DispatchSemaphore(value: 0)
 			DispatchQueue.main.async {
-				guard let vc = self.factory[id]?(state) else { fatalError("can't construct view controller \(id)") }
+				let vc = id.create(state: state)
 				self.viewControllers[id] = WeakBox(value: vc)
 				let top = topViewController()
 				top.present(vc, animated: isLast, completion: {
