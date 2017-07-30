@@ -10,23 +10,27 @@
 public protocol Action { }
 
 public protocol State {
-	mutating func transition(using: Action)
+	mutating func transition(dueTo: Action)
 }
 
 public typealias Dispatcher = (Action) -> Void
+public typealias Logger = (_ pre: State, _ action: Action, _ post: State) -> Void
+public typealias Observer = (State) -> Void
 
 public final class Store {
 
-	public typealias Observer = (State) -> Void
-
-	public init(state: State) {
+	public init(state: State, logger: Logger? = nil) {
+		self.log = logger
 		self.state = state
 	}
 
 	public func dispatch(action: Action) {
 		guard !isDispatching else { fatalError("Cannot dispatch in the middle of a dispatch") }
 		isDispatching = true
-		state.transition(using: action)
+		let pre = state
+		state.transition(dueTo: action)
+		let post = state
+		log?(pre, action, post)
 		for subscriber in subscribers.values {
 			subscriber(state)
 		}
@@ -46,6 +50,7 @@ public final class Store {
 	private var state: State
 	private var isDispatching = false
 	private var subscribers: [UUID: Observer] = [:]
+	private let log: Logger?
 }
 
 public final class Unsubscriber {
