@@ -10,27 +10,27 @@ import Foundation
 
 public protocol Command: Hashable {
 	func cancel()
-	func launch(dispatcher: @escaping Dispatcher)
+	func launch(dispatcher: Dispatcher)
 }
 
 public final class CommandComponent<C: Command> {
 	
 	public typealias Commands = Set<C>
-
-	public init(store: Store, lens: @escaping (State) -> Commands) {
-		self.store = store
+	
+	public init<S: State>(store: Store<S>, lens: @escaping (S) -> Commands) {
+		self.dispatcher = store
 		unsubscriber = store.subscribe { [weak self] state in
 			let commands = lens(state)
 			self?.configure(using: commands)
 		}
 	}
 	
-	private let store: Store
+	private let dispatcher: Dispatcher
 	private var unsubscriber: Unsubscriber?
 	private var inFlight: Commands = Set()
 	
 	private func configure(using target: Commands) {
-		cancelLaunch(current: inFlight, target: target, cancel: { $0.cancel() }, launch: { $0.launch(dispatcher: store.dispatch(action:)) })
+		cancelLaunch(current: inFlight, target: target, cancel: { $0.cancel() }, launch: { $0.launch(dispatcher: dispatcher) })
 		inFlight = target
 	}
 }
@@ -65,7 +65,7 @@ public struct AnyCommand: Command {
 		_cancel()
 	}
 	
-	public func launch(dispatcher: @escaping Dispatcher) {
+	public func launch(dispatcher: Dispatcher) {
 		_launch(dispatcher)
 	}
 	
@@ -77,5 +77,5 @@ public struct AnyCommand: Command {
 	private let _hashValue: () -> Int
 	private let _equals: (Any) -> Bool
 	private let _cancel: () -> Void
-	private let _launch: (@escaping Dispatcher) -> Void
+	private let _launch: (Dispatcher) -> Void
 }

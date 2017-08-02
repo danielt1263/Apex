@@ -9,28 +9,35 @@
 
 public protocol Action { }
 
-public protocol State {
-	mutating func transition(dueTo: Action)
+public protocol Dispatcher {
+	func dispatch(action: Action)
 }
 
-public typealias Dispatcher = (Action) -> Void
-public typealias Logger = (_ pre: State, _ action: Action, _ post: State) -> Void
-public typealias Observer = (State) -> Void
+public protocol Publisher {
+	associatedtype State
+	typealias Observer = (State) -> Void
+	func subscribe(observer: @escaping Observer) -> Unsubscriber
+}
 
-public final class Store {
+public protocol State {
+	mutating func transition(_ action: Action)
+}
 
-	public init(state: State, logger: Logger? = nil) {
-		self.log = logger
+public final class Store<S: State>: Dispatcher, Publisher {
+
+	public typealias State = S
+	public typealias Logger = (S, Action) -> Void
+	
+	public init(state: S, loggers: [Logger] = []) {
 		self.state = state
+		self.loggers = loggers
 	}
 
 	public func dispatch(action: Action) {
 		guard !isDispatching else { fatalError("Cannot dispatch in the middle of a dispatch") }
 		isDispatching = true
-		let pre = state
-		state.transition(dueTo: action)
-		let post = state
-		log?(pre, action, post)
+		loggers.forEach { $0(state, action) }
+		state.transition(action)
 		for subscriber in subscribers.values {
 			subscriber(state)
 		}
@@ -47,10 +54,10 @@ public final class Store {
 		return Unsubscriber(method: dispose)
 	}
 
-	private var state: State
+	private var state: S
 	private var isDispatching = false
 	private var subscribers: [UUID: Observer] = [:]
-	private let log: Logger?
+	private let loggers: [Logger]
 }
 
 public final class Unsubscriber {
