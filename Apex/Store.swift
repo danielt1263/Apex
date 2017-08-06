@@ -9,24 +9,39 @@
 
 public protocol Action { }
 
-public typealias Dispatcher = (Action) -> Void
+public protocol Dispatcher {
+	func dispatch(action: Action)
+}
 
-public final class Store<State> {
+public protocol Publisher {
+	associatedtype State
+	typealias Observer = (State) -> Void
+	func subscribe(observer: @escaping Observer) -> Unsubscriber
+}
 
-	public typealias Reducer = (State, Action) -> State
-	public typealias Observer = (State) -> Void
-	public typealias Middleware = (_ dispatcher: @escaping Dispatcher, _ state: @escaping () -> State, _ next: @escaping Dispatcher) -> Dispatcher
+public protocol State {
+	mutating func transition(_ action: Action)
+}
 
-	public init(state: State, reducer: @escaping Reducer, middleware: [Middleware] = []) {
+public final class Store<S: State>: Dispatcher, Publisher {
+
+	public typealias State = S
+	public typealias Logger = (S, Action) -> Void
+	
+	public init(state: S, loggers: [Logger] = []) {
 		self.state = state
-		reduce = reducer
-		dispatcher = middleware.reversed().reduce(self._dispatch) { result, middleware in
-			return middleware(self.dispatch, { self.state }, result)
-		}
+		self.loggers = loggers
 	}
 
 	public func dispatch(action: Action) {
-		self.dispatcher(action)
+		guard !isDispatching else { fatalError("Cannot dispatch in the middle of a dispatch") }
+		isDispatching = true
+		loggers.forEach { $0(state, action) }
+		state.transition(action)
+		for subscriber in subscribers.values {
+			subscriber(state)
+		}
+		isDispatching = false
 	}
 
 	public func subscribe(observer: @escaping Observer) -> Unsubscriber {
@@ -39,22 +54,10 @@ public final class Store<State> {
 		return Unsubscriber(method: dispose)
 	}
 
-	private var state: State
-	private let reduce: Reducer
+	private var state: S
 	private var isDispatching = false
 	private var subscribers: [UUID: Observer] = [:]
-	private var dispatcher: Dispatcher = { _ in fatalError() }
-
-	private func _dispatch(action: Action) {
-		guard !isDispatching else { fatalError("Cannot dispatch in the middle of a dispatch") }
-		isDispatching = true
-		state = reduce(state, action)
-		for subscriber in subscribers.values {
-			subscriber(state)
-		}
-		isDispatching = false
-	}
-
+	private let loggers: [Logger]
 }
 
 public final class Unsubscriber {
