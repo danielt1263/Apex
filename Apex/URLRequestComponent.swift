@@ -8,9 +8,9 @@
 
 public final class URLRequestComponent {
 	
-	public init<S: State>(store: Store<S>, lens: @escaping (S) -> URLRequesterState, session: URLSession = URLSession.shared) {
+	public init<S: State>(store: Store<S>, lens: @escaping (S) -> URLRequestState, session: URLSession = URLSession.shared) {
 		let commandLens = { state in
-			Set(lens(state).map { URLRequestCommand(request: $0, session: session) })
+			Set(lens(state).active.map { URLRequestCommand(request: $0, session: session) })
 		}
 		self.commandManager = CommandComponent(store: store, lens: commandLens)
 	}
@@ -35,10 +35,10 @@ public final class URLRequestCommand: Command {
 			self.dataTask = nil
 			DispatchQueue.main.async {
 				if let data = data, let response = response {
-					dispatcher.dispatch(action: URLRequesterAction.success(request: self.request, data: data, response: response))
+					dispatcher.dispatch(action: URLRequestAction.success(request: self.request, data: data, response: response))
 				}
 				if let error = error {
-					dispatcher.dispatch(action: URLRequesterAction.failure(request: self.request, error: error))
+					dispatcher.dispatch(action: URLRequestAction.failure(request: self.request, error: error))
 				}
 			}
 		}
@@ -72,10 +72,22 @@ public enum URLRequestAction: Action {
 }
 
 public struct URLRequestState: State {
-	public var active: Set<URLRequest>
 	
-	mutating func transition(_ action: Action) {
-		guard let action = action as? URLRequestAction else { return }
-		active.remove(action.request)
+	public init() { }
+	
+	public mutating func insert(_ request: URLRequest) {
+		active.insert(request)
 	}
+	
+	public mutating func remove(_ request: URLRequest) {
+		active.remove(request)
+	}
+
+	public mutating func transition(_ action: Action) {
+		if let action = action as? URLRequestAction {
+			active.remove(action.request)
+		}
+	}
+	
+	public private (set) var active: Set<URLRequest> = Set()
 }
