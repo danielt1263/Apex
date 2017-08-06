@@ -21,13 +21,13 @@ The command component isn't necessary for Apex to work, and simple apps that don
 
 In order to create a command component, provide a `lens`. A lens is a function that knows how to navigate through your State value to get to the underlying command Set.
 
-Commands can be both launched and canceled. To launch a command, insert one into your state's command set set. Then the CommandComponent will launch that command. When your transition removes a command from its set, the component will cancel that command.
+Commands can be both launched and canceled. To launch a command, insert one into your state's command set. Then the CommandComponent will launch that command. When your transition removes a command from its set, the component will cancel that command.
 
-On important thing to remember is to remove commands if they naturally complete so as not to fill the set with commands that are no longer needed.
+One important thing to remember is to remove commands if they naturally complete so as not to fill the set with commands that are no longer needed.
 
-#### Network Command
+#### Network Commands
 
-Since the most common use of the system is for network requests, a special `URLRequestComponent` has been added to the library that uses the CommandComponent in its implementation. This component already has an implemented command class: `URLRequestCommand`, it's own actions `URLRequestAction` and state object `URLRequestState`.
+Since the most common use of the system is for network requests, a special `URLRequestComponent` has been added to the library that uses the CommandComponent in its implementation. This component already has an implemented command class: `URLRequestCommand`, its own actions `URLRequestAction` and state object `URLRequestState`.
 
 To use this, add a URLRequestState object as a property of your State struct and be sure to call its `transition` function from inside your transition function. Then create a URLRequestComponent.
 
