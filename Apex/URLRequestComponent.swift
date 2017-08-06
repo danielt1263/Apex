@@ -6,8 +6,6 @@
 //  Copyright © 2017 Daniel Tartaglia. MIT License.
 //
 
-public typealias URLRequesterState = Set<URLRequest>
-
 public final class URLRequestComponent {
 	
 	public init<S: State>(store: Store<S>, lens: @escaping (S) -> URLRequesterState, session: URLSession = URLSession.shared) {
@@ -34,6 +32,7 @@ public final class URLRequestCommand: Command {
 	
 	public func launch(dispatcher: Dispatcher) {
 		dataTask = session.dataTask(with: request) { (data, response, error) in
+			self.dataTask = nil
 			DispatchQueue.main.async {
 				if let data = data, let response = response {
 					dispatcher.dispatch(action: URLRequesterAction.success(request: self.request, data: data, response: response))
@@ -57,7 +56,7 @@ public final class URLRequestCommand: Command {
 	private var dataTask: URLSessionDataTask?
 }
 
-public enum URLRequesterAction: Action {
+public enum URLRequestAction: Action {
 	case success(request: URLRequest, data: Data, response: URLResponse)
 	case failure(request: URLRequest, error: Error)
 	
@@ -69,5 +68,14 @@ public enum URLRequesterAction: Action {
 		case .failure(let (request, _)):
 			return request
 		}
+	}
+}
+
+public struct URLRequestState: State {
+	public var active: Set<URLRequest>
+	
+	mutating func transition(_ action: Action) {
+		guard let action = action as? URLRequestAction else { return }
+		active.remove(action.request)
 	}
 }
