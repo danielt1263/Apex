@@ -15,13 +15,13 @@ To use Apex, you simply need to create a single Store object to manage the State
 
 ### Handling Asynchronous commands.
 
-To those familiar with redux, the above will sound quite familiar, but notice that Apex has no notion of `middleware` to handle asynchronous actions. Instead, Apex deals with asynchronous commands through a `CommandComponent`.
+To those have heard of redux, the above will sound  familiar, but notice that Apex has no notion of `middleware` to handle asynchronous actions. Instead, Apex deals with asynchronous commands through a `CommandComponent`.
 
-The command component isn't necessary for Apex to work and simple apps that don't need it can ignore it. In order for an App to handle commands, you simply create a type that conforms to the `Command` protocol and put a `Set<MyCommand>` inside your state that represents all the commands that should currently be active. After you have that, you create a CommandComponent (one for each type of command) and keep it with your Store object.
+The command component isn't necessary for Apex to work, and simple apps that don't need it can ignore it. In order for an App to handle commands, simply create a type that conforms to the `Command` protocol and put a `Set<MyCommand>` inside your state that represents all the commands that should currently be active. After you have that, create a CommandComponent (one for each type of command) and keep it with your Store object.
 
-In order to create a command component, you must provide a `lens`. A lens is a function that knows how to navigate through your State value to get to the underlying command Set.
+In order to create a command component, provide a `lens`. A lens is a function that knows how to navigate through your State value to get to the underlying command Set.
 
-When your State.transition function inserts a command into its set of in-flight commands, the CommandComponent will launch that command, when your transition removes a command from its set, the component will cancel that command.
+Commands can be both launched and canceled. To launch a command, insert one into your state's command set set. Then the CommandComponent will launch that command. When your transition removes a command from its set, the component will cancel that command.
 
 On important thing to remember is to remove commands if they naturally complete so as not to fill the set with commands that are no longer needed.
 
