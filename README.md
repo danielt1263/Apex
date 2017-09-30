@@ -11,13 +11,13 @@ This is accomplished by imagining your app as a [Moore type State Machine](https
  - An output function: In Apex, the output function is modeled by the various functions that subscribe to the store. The output functions are where you perform all of your side effects in response to state changes.
  
 ## Using Apex
-To use Apex, you simply need to create a single Store object to manage the State of your app. This store object can either be a global or passed to objects that need access to or need to change the state.
+To use Apex, you create a single Store object to manage the State of your app. This store object can either be a global or passed to objects that need access to or need to change the state.
 
 ### Handling Asynchronous commands.
 
-To those have heard of redux, the above will sound  familiar, but notice that Apex has no notion of `middleware` to handle asynchronous actions. Instead, Apex deals with asynchronous commands through a `CommandComponent`.
+To those have heard of redux, the above will sound familiar, but notice that Apex has no notion of `middleware` to handle asynchronous actions. Instead, Apex deals with asynchronous commands through a `CommandComponent`.
 
-The command component isn't necessary for Apex to work, and simple apps that don't need it can ignore it. In order for an App to handle commands, simply create a type that conforms to the `Command` protocol and put a `Set<MyCommand>` inside your state that represents all the commands that should currently be active. After you have that, create a CommandComponent (one for each type of command) and keep it with your Store object.
+The command component isn't necessary for Apex to work, and simple apps that don't need it can ignore it. To handle commands, create a type that conforms to the `Command` protocol and put a `Set<MyCommand>` inside your state that represents all the commands that should currently be active. After you have that, create a CommandComponent (one for each type of command) and keep it with your Store object.
 
 In order to create a command component, provide a `lens`. A lens is a function that knows how to navigate through your State value to get to the underlying command Set.
 
@@ -32,3 +32,7 @@ Since the most common use of the system is for network requests, a special `URLR
 To use this, add a URLRequestState object as a property of your State struct and be sure to call its `transition` function from inside your transition function. Then create a URLRequestComponent.
 
 The URLRequestComponent you created will make network requests when they are added to the state and cancel them if they are removed from the state before they complete. When they complete naturally, the URLRequestState object will remove them from its Set of requests.
+
+#### View Controller management
+
+Another useful component that comes with the system is the `ViewControllerPresentationComponent`. To use this component, create one by passing in the window's root view controller, the store and a lense (as described above.) Your State object will need a property that represents an array of `ViewController`s which are hashable types that act as `UIViewController` factories. This component will present and dismiss UIViewControllers as necessary to conform to the array in your state. To present a view controller, add it's factory to your state's ViewController array, to dismiss one remove it from the array. As with Actions, your type that conforms to the `ViewController` protocol can be any type as long as it's immutable but it makes the most sense to make it an enum.

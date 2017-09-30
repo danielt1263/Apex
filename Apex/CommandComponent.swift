@@ -8,74 +8,36 @@
 
 import Foundation
 
-public protocol Command: Hashable {
-	func cancel()
+public protocol Command {
 	func launch(dispatcher: Dispatcher)
+	func cancel()
 }
 
-public final class CommandComponent<C: Command> {
+public final class CommandComponent<Request: Hashable> {
+	public typealias Requests = Set<Request>
 	
-	public typealias Commands = Set<C>
-	
-	public init<S: State>(store: Store<S>, lens: @escaping (S) -> Commands) {
-		self.dispatcher = store
-		unsubscriber = store.subscribe { [weak self] state in
-			let commands = lens(state)
-			self?.configure(using: commands)
-		}
+	public init<S>(store: Store<S>, lens: @escaping (S) -> Requests, commandFactory: @escaping (Request) -> Command) {
+		dispatcher = store
+		createCommand = commandFactory
+		unsubscriber = store.subscribe(observer: { [weak self] state in
+			self?.configure(using: lens(state))
+		})
 	}
-	
+
 	private let dispatcher: Dispatcher
+	private let createCommand: (Request) -> Command
 	private var unsubscriber: Unsubscriber?
-	private var inFlight: Commands = Set()
+	private var inFlight: [Request: Command] = [:]
 	
-	private func configure(using target: Commands) {
-		cancelLaunch(current: inFlight, target: target, cancel: { $0.cancel() }, launch: { $0.launch(dispatcher: dispatcher) })
-		inFlight = target
-	}
-}
-
-public func cancelLaunch<T>(current: Set<T>, target: Set<T>, cancel: (T) -> Void, launch: (T) -> Void) {
-	for each in current.subtracting(target) {
-		cancel(each)
-	}
-	for each in target.subtracting(current) {
-		launch(each)
-	}
-}
-
-public struct AnyCommand: Command {
-	
-	public init<C: Command>(_ base: C) {
-		self.base = base
-		self._hashValue = { base.hashValue }
-		self._equals = {
-			if let other = $0 as? C {
-				return base == other
-			}
-			return false
+	private func configure(using requests: Requests) {
+		for each in Set(inFlight.keys).subtracting(requests) {
+			inFlight[each]!.cancel()
+			inFlight.removeValue(forKey: each)
 		}
-		self._cancel = base.cancel
-		self._launch = base.launch
+		for each in requests.subtracting(inFlight.keys) {
+			let command = createCommand(each)
+			inFlight[each] = command
+			command.launch(dispatcher: dispatcher)
+		}
 	}
-	
-	public var hashValue: Int { return _hashValue() }
-	
-	public func cancel() {
-		_cancel()
-	}
-	
-	public func launch(dispatcher: Dispatcher) {
-		_launch(dispatcher)
-	}
-	
-	public static func ==(lhs: AnyCommand, rhs: AnyCommand) -> Bool {
-		return lhs._equals(rhs.base)
-	}
-	
-	private let base: Any
-	private let _hashValue: () -> Int
-	private let _equals: (Any) -> Bool
-	private let _cancel: () -> Void
-	private let _launch: (Dispatcher) -> Void
 }

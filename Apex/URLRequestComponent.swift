@@ -8,14 +8,13 @@
 
 public final class URLRequestComponent {
 	
-	public init<S: State>(store: Store<S>, lens: @escaping (S) -> URLRequestState, session: URLSession = URLSession.shared) {
-		let commandLens = { state in
-			Set(lens(state).active.map { URLRequestCommand(request: $0, session: session) })
-		}
-		self.commandManager = CommandComponent(store: store, lens: commandLens)
+	public init<S>(store: Store<S>, lens: @escaping (S) -> Set<URLRequest>, session: URLSession = URLSession.shared) {
+		component = CommandComponent(store: store, lens: lens, commandFactory: {
+			return URLRequestCommand(request: $0, session: session)
+		})
 	}
 	
-	private let commandManager: CommandComponent<URLRequestCommand>
+	let component: CommandComponent<URLRequest>
 }
 
 public final class URLRequestCommand: Command {
@@ -23,11 +22,6 @@ public final class URLRequestCommand: Command {
 	public init(request: URLRequest, session: URLSession = URLSession.shared) {
 		self.request = request
 		self.session = session
-	}
-	
-	public func cancel() {
-		dataTask?.cancel()
-		dataTask = nil
 	}
 	
 	public func launch(dispatcher: Dispatcher) {
@@ -45,10 +39,9 @@ public final class URLRequestCommand: Command {
 		dataTask?.resume()
 	}
 	
-	public var hashValue: Int { return request.hashValue }
-	
-	public static func ==(lhs: URLRequestCommand, rhs: URLRequestCommand) -> Bool {
-		return lhs.session == rhs.session
+	public func cancel() {
+		dataTask?.cancel()
+		dataTask = nil
 	}
 	
 	private let session: URLSession
@@ -71,23 +64,3 @@ public enum URLRequestAction: Action {
 	}
 }
 
-public struct URLRequestState: State {
-	
-	public init() { }
-	
-	public mutating func insert(_ request: URLRequest) {
-		active.insert(request)
-	}
-	
-	public mutating func remove(_ request: URLRequest) {
-		active.remove(request)
-	}
-
-	public mutating func transition(_ action: Action) {
-		if let action = action as? URLRequestAction {
-			active.remove(action.request)
-		}
-	}
-	
-	public private (set) var active: Set<URLRequest> = Set()
-}

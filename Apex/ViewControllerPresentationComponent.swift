@@ -8,12 +8,12 @@
 
 import UIKit
 
-public protocol ViewController: Hashable {
+public protocol ViewControllerFactory: Hashable {
 	associatedtype State
 	func create(_ state: State) -> UIViewController
 }
 
-public final class ViewControllerPresentationComponent<P: Publisher, VC: ViewController> where VC.State == P.State {
+public final class ViewControllerPresentationComponent<P: Publisher, VC: ViewControllerFactory> where VC.State == P.State {
 
 	public init(rootViewController: UIViewController, publisher: P, lens: @escaping (P.State) -> [VC]) {
 		self.lens = lens
@@ -43,8 +43,10 @@ public final class ViewControllerPresentationComponent<P: Publisher, VC: ViewCon
 		let semaphore = DispatchSemaphore(value: 0)
 		let top = topViewController()
 		guard self.viewControllers.values.contains(where: { $0.value == top }) else { return }
-		assert(top != self.rootViewController, "Can't dismiss the root view controller. Did you forget fill in the alert IDs?")
+		assert(top != self.rootViewController, "Can't dismiss the root view controller.")
 		DispatchQueue.main.async {
+			defer { semaphore.signal() }
+			guard top.isBeingDismissed == false else { return } // necessary because UIAlertControllers dismiss themselves.
 			top.dismiss(animated: isLast, completion: {
 				semaphore.signal()
 			})
