@@ -13,6 +13,8 @@
 		09C5D8011E92F3E100305F5C /* Store.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09C5D7FD1E92F3E100305F5C /* Store.swift */; };
 		09C5D8041E92F3E100305F5C /* PopPushAlgorithm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09C5D8001E92F3E100305F5C /* PopPushAlgorithm.swift */; };
 		721C62EB1E7D51B40047A914 /* PopPushTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 721C62EA1E7D51B40047A914 /* PopPushTests.swift */; };
+		727B2FA81F804EDB003A325D /* NavigationComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 727B2FA71F804EDB003A325D /* NavigationComponent.swift */; };
+		727B2FAA1F804F47003A325D /* PushPopExpress.swift in Sources */ = {isa = PBXBuildFile; fileRef = 727B2FA91F804F47003A325D /* PushPopExpress.swift */; };
 		72BB6C6E1F25198B00C42AF1 /* ViewControllerPresentationComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72BB6C6B1F25198B00C42AF1 /* ViewControllerPresentationComponent.swift */; };
 		72BB6C6F1F25198B00C42AF1 /* URLRequestComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72BB6C6C1F25198B00C42AF1 /* URLRequestComponent.swift */; };
 		72BB6C701F25198B00C42AF1 /* CommandComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72BB6C6D1F25198B00C42AF1 /* CommandComponent.swift */; };
@@ -40,6 +42,8 @@
 		09C5D7FD1E92F3E100305F5C /* Store.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Store.swift; sourceTree = "<group>"; };
 		09C5D8001E92F3E100305F5C /* PopPushAlgorithm.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PopPushAlgorithm.swift; sourceTree = "<group>"; };
 		721C62EA1E7D51B40047A914 /* PopPushTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PopPushTests.swift; sourceTree = "<group>"; };
+		727B2FA71F804EDB003A325D /* NavigationComponent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NavigationComponent.swift; sourceTree = "<group>"; };
+		727B2FA91F804F47003A325D /* PushPopExpress.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushPopExpress.swift; sourceTree = "<group>"; };
 		72BB6C6B1F25198B00C42AF1 /* ViewControllerPresentationComponent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewControllerPresentationComponent.swift; sourceTree = "<group>"; };
 		72BB6C6C1F25198B00C42AF1 /* URLRequestComponent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = URLRequestComponent.swift; sourceTree = "<group>"; };
 		72BB6C6D1F25198B00C42AF1 /* CommandComponent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommandComponent.swift; sourceTree = "<group>"; };
@@ -102,6 +106,7 @@
 				72BB6C6B1F25198B00C42AF1 /* ViewControllerPresentationComponent.swift */,
 				72BB6C6D1F25198B00C42AF1 /* CommandComponent.swift */,
 				72BB6C6C1F25198B00C42AF1 /* URLRequestComponent.swift */,
+				727B2FA71F804EDB003A325D /* NavigationComponent.swift */,
 				09C5D8001E92F3E100305F5C /* PopPushAlgorithm.swift */,
 				090569651E79C5DC00C3A4A8 /* Apex.h */,
 				090569661E79C5DC00C3A4A8 /* Info.plist */,
@@ -114,6 +119,7 @@
 			children = (
 				090569701E79C5DD00C3A4A8 /* ApexTests.swift */,
 				721C62EA1E7D51B40047A914 /* PopPushTests.swift */,
+				727B2FA91F804F47003A325D /* PushPopExpress.swift */,
 				090569721E79C5DD00C3A4A8 /* Info.plist */,
 			);
 			path = ApexTests;
@@ -212,7 +218,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0820;
-				LastUpgradeCheck = 0820;
+				LastUpgradeCheck = 0900;
 				ORGANIZATIONNAME = "Daniel Tartaglia";
 				TargetAttributes = {
 					090569611E79C5DC00C3A4A8 = {
@@ -285,6 +291,7 @@
 				09C5D8011E92F3E100305F5C /* Store.swift in Sources */,
 				09C5D8041E92F3E100305F5C /* PopPushAlgorithm.swift in Sources */,
 				72BB6C6E1F25198B00C42AF1 /* ViewControllerPresentationComponent.swift in Sources */,
+				727B2FA81F804EDB003A325D /* NavigationComponent.swift in Sources */,
 				72BB6C701F25198B00C42AF1 /* CommandComponent.swift in Sources */,
 				72BB6C6F1F25198B00C42AF1 /* URLRequestComponent.swift in Sources */,
 			);
@@ -296,6 +303,7 @@
 			files = (
 				090569711E79C5DD00C3A4A8 /* ApexTests.swift in Sources */,
 				721C62EB1E7D51B40047A914 /* PopPushTests.swift in Sources */,
+				727B2FAA1F804F47003A325D /* PushPopExpress.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -327,7 +335,9 @@
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
@@ -335,7 +345,11 @@
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
@@ -380,7 +394,9 @@
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
@@ -388,7 +404,11 @@
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;

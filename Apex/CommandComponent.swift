@@ -8,12 +8,15 @@
 
 import Foundation
 
-public protocol Command {
+
+public
+protocol Command {
 	func launch(dispatcher: Dispatcher)
 	func cancel()
 }
 
-public final class CommandComponent<Request: Hashable> {
+public final
+class CommandComponent<Request: Hashable> {
 	public typealias Requests = Set<Request>
 	
 	public init<S>(store: Store<S>, lens: @escaping (S) -> Requests, commandFactory: @escaping (Request) -> Command) {

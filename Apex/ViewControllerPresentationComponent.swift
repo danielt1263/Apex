@@ -8,12 +8,15 @@
 
 import UIKit
 
-public protocol ViewControllerFactory: Hashable {
+
+public
+protocol ViewControllerFactory: Hashable {
 	associatedtype State
 	func create(_ state: State) -> UIViewController
 }
 
-public final class ViewControllerPresentationComponent<P: Publisher, VC: ViewControllerFactory> where VC.State == P.State {
+public final
+class ViewControllerPresentationComponent<P: Publisher, VC: ViewControllerFactory> where VC.State == P.State {
 
 	public init(rootViewController: UIViewController, publisher: P, lens: @escaping (P.State) -> [VC]) {
 		self.lens = lens
@@ -84,13 +87,15 @@ public final class ViewControllerPresentationComponent<P: Publisher, VC: ViewCon
 
 protocol ReferenceObject: class { }
 
-private struct WeakBox<T> where T: ReferenceObject {
+private
+struct WeakBox<T> where T: ReferenceObject {
 	weak var value: T?
 }
 
 extension UIViewController: ReferenceObject { }
 
-private func topViewController() -> UIViewController {
+private
+func topViewController() -> UIViewController {
 	guard let rootViewController = UIApplication.shared.delegate?.window??.rootViewController else { fatalError("No view controller present in app?") }
 	var result = rootViewController
 	while let vc = result.presentedViewController {

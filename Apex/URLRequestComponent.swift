@@ -6,7 +6,9 @@
 //  Copyright © 2017 Daniel Tartaglia. MIT License.
 //
 
-public final class URLRequestComponent {
+
+public final
+class URLRequestComponent {
 	
 	public init<S>(store: Store<S>, lens: @escaping (S) -> Set<URLRequest>, session: URLSession = URLSession.shared) {
 		component = CommandComponent(store: store, lens: lens, commandFactory: {
@@ -17,7 +19,8 @@ public final class URLRequestComponent {
 	let component: CommandComponent<URLRequest>
 }
 
-public final class URLRequestCommand: Command {
+public final
+class URLRequestCommand: Command {
 	
 	public init(request: URLRequest, session: URLSession = URLSession.shared) {
 		self.request = request
@@ -49,7 +52,8 @@ public final class URLRequestCommand: Command {
 	private var dataTask: URLSessionDataTask?
 }
 
-public enum URLRequestAction: Action {
+public
+enum URLRequestAction: Action {
 	case success(request: URLRequest, data: Data, response: URLResponse)
 	case failure(request: URLRequest, error: Error)
 	

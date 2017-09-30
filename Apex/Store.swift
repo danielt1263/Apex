@@ -7,23 +7,28 @@
 //
 
 
-public protocol Action { }
+public
+protocol Action { }
 
-public protocol Dispatcher {
+public
+protocol Dispatcher {
 	func dispatch(action: Action)
 }
 
-public protocol Publisher {
+public
+protocol Publisher {
 	associatedtype State
 	typealias Observer = (State) -> Void
 	func subscribe(observer: @escaping Observer) -> Unsubscriber
 }
 
-public protocol State {
+public
+protocol State {
 	mutating func transition(_ action: Action)
 }
 
-public final class Store<S: State>: Dispatcher, Publisher {
+public final
+class Store<S: State>: Dispatcher, Publisher {
 
 	public typealias State = S
 	public typealias Logger = (S, Action) -> Void
@@ -60,7 +65,8 @@ public final class Store<S: State>: Dispatcher, Publisher {
 	private let loggers: [Logger]
 }
 
-public final class Unsubscriber {
+public final
+class Unsubscriber {
 	private var method: (() -> Void)?
 
 	fileprivate init(method: @escaping () -> Void) {
