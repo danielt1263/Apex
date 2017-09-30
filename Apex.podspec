@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name     = 'Apex'
-  s.version  = '2.0.0'
+  s.version  = '3.0.0'
   s.ios.deployment_target = '9.3'
   s.license  =  { :type => 'MIT', :file => 'LICENSE' }
   s.summary  = 'A Swift model management library with async capability built in.'
