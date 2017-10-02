@@ -9,47 +9,42 @@
 import UIKit
 
 
-public
-protocol ViewControllerFactory: Hashable {
-	associatedtype State
-	func create(_ state: State) -> UIViewController
-}
-
 public final
-class ViewControllerPresentationComponent<P: Publisher, VC: ViewControllerFactory> where VC.State == P.State {
+class ViewControllerPresentationComponent<P: Publisher, ViewControllerID: Hashable> {
 
-	public init(rootViewController: UIViewController, publisher: P, lens: @escaping (P.State) -> [VC]) {
+	public init(root: UIViewController, publisher: P, lens: @escaping (P.State) -> [ViewControllerID], factory: @escaping (ViewControllerID, P.State) -> UIViewController) {
+		rootViewController = root
 		self.lens = lens
-		self.rootViewController = rootViewController
+		createViewController = factory
 		unsubscriber = publisher.subscribe(observer: { [weak self] state in
 			self?.configure(using: state)
 		})
 	}
 
 	private var unsubscriber: Unsubscriber?
-	private var currentStack: [VC] = []
-	private var viewControllers: [VC: WeakBox<UIViewController>] = [:]
+	private var currentStack: [ViewControllerID] = []
+	private var viewControllers: [ViewControllerID: WeakBox<UIViewController>] = [:]
 	private let queue = DispatchQueue(label: "view_controller_presenter")
-	private let lens: (P.State) -> [VC]
 	private let rootViewController: UIViewController
+	private let lens: (P.State) -> [ViewControllerID]
+	private let createViewController: (ViewControllerID, P.State) -> UIViewController
 
 	private func configure(using state: P.State) {
 		let presentationStack = lens(state)
-		queue.async {
+		// the delay is needed to ensure that UIAlertControllers are fully deleted before culling happens.
+		queue.asyncAfter(deadline: .now() + 0.2) {
 			self.cull()
 			popPush(current: self.currentStack, target: presentationStack, pop: self.pop, push: self.push(state: state))
 			self.currentStack = presentationStack
 		}
 	}
 
-	private func pop(id: VC, isLast: Bool) -> Void {
+	private func pop(id: ViewControllerID, isLast: Bool) -> Void {
 		let semaphore = DispatchSemaphore(value: 0)
 		let top = topViewController()
 		guard self.viewControllers.values.contains(where: { $0.value == top }) else { return }
 		assert(top != self.rootViewController, "Can't dismiss the root view controller.")
 		DispatchQueue.main.async {
-			defer { semaphore.signal() }
-			guard top.isBeingDismissed == false else { return } // necessary because UIAlertControllers dismiss themselves.
 			top.dismiss(animated: isLast, completion: {
 				semaphore.signal()
 			})
@@ -57,11 +52,11 @@ class ViewControllerPresentationComponent<P: Publisher, VC: ViewControllerFactor
 		semaphore.wait()
 	}
 
-	private func push(state: P.State) -> (VC, Bool) -> Void {
+	private func push(state: P.State) -> (ViewControllerID, Bool) -> Void {
 		return { id, isLast in
 			let semaphore = DispatchSemaphore(value: 0)
 			DispatchQueue.main.async {
-				let vc = id.create(state)
+				let vc = self.createViewController(id, state)
 				self.viewControllers[id] = WeakBox(value: vc)
 				let top = topViewController()
 				top.present(vc, animated: isLast, completion: {
