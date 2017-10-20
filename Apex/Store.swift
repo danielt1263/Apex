@@ -39,14 +39,19 @@ class Store<S: State>: Dispatcher, Publisher {
 	}
 
 	public func dispatch(action: Action) {
-		guard !isDispatching else { fatalError("Cannot dispatch in the middle of a dispatch") }
-		isDispatching = true
-		loggers.forEach { $0(state, action) }
-		state.transition(action)
-		for subscriber in subscribers.values {
-			subscriber(state)
+		queue.async { [unowned self] in
+			self.loggers.forEach { $0(self.state, action) }
+			self.state.transition(action)
+
+			DispatchQueue.main.async {
+				guard !self.isDispatching else { fatalError("Cannot dispatch in the middle of a dispatch") }
+				self.isDispatching = true
+				for subscriber in self.subscribers.values {
+					subscriber(self.state)
+				}
+				self.isDispatching = false
+			}
 		}
-		isDispatching = false
 	}
 
 	public func subscribe(observer: @escaping Observer) -> Unsubscriber {
@@ -59,6 +64,7 @@ class Store<S: State>: Dispatcher, Publisher {
 		return Unsubscriber(method: dispose)
 	}
 
+	private let queue = DispatchQueue(label: "store")
 	private var state: S
 	private var isDispatching = false
 	private var subscribers: [UUID: Observer] = [:]
