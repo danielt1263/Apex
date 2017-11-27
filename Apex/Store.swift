@@ -32,26 +32,28 @@ class Store<S: State>: Dispatcher, Publisher {
 
 	public typealias State = S
 	public typealias Logger = (S, Action) -> Void
-	
-	public init(state: S, loggers: [Logger] = []) {
-		self.state = state
+
+	public init(initial: (State, Command?), update: @escaping (State, Action) -> (State, Command?), loggers: [Logger] = []) {
+		self.state = initial.0
+		self.update = update
 		self.loggers = loggers
+		initial.1?.execute(self.dispatch)
 	}
 
-	public func dispatch(action: Action) {
-		queue.async { [unowned self] in
-			self.loggers.forEach { $0(self.state, action) }
-			self.state.transition(action)
+	public func dispatch(action: Action) -> Void {
+		let result = update(state, action)
+		state = result.0
 
-			DispatchQueue.main.async {
-				guard !self.isDispatching else { fatalError("Cannot dispatch in the middle of a dispatch") }
-				self.isDispatching = true
-				for subscriber in self.subscribers.values {
-					subscriber(self.state)
-				}
-				self.isDispatching = false
+		DispatchQueue.main.async {
+			guard !self.isDispatching else { fatalError("Cannot dispatch in the middle of a dispatch") }
+			self.isDispatching = true
+			for subscriber in self.subscribers.values {
+				subscriber(self.state)
 			}
+			self.isDispatching = false
+			result.1?.execute(self.dispatch)
 		}
+
 	}
 
 	public func subscribe(observer: @escaping Observer) -> Unsubscriber {
@@ -65,10 +67,11 @@ class Store<S: State>: Dispatcher, Publisher {
 	}
 
 	private let queue = DispatchQueue(label: "store")
+	private let update: (State, Action) -> (State, Command?)
+	private let loggers: [Logger]
 	private var state: S
 	private var isDispatching = false
 	private var subscribers: [UUID: Observer] = [:]
-	private let loggers: [Logger]
 }
 
 public final

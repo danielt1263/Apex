@@ -1,5 +1,5 @@
 //
-//  CommandComponent.swift
+//  SubscriptionComponent.swift
 //  Apex
 //
 //  Created by Daniel Tartaglia on 7/22/17.
@@ -10,27 +10,27 @@ import Foundation
 
 
 public
-protocol Command {
+protocol Subscription {
 	func launch(dispatcher: Dispatcher)
 	func cancel()
 }
 
 public final
-class CommandComponent<Request: Hashable> {
+class SubscriptionComponent<Request: Hashable> {
 	public typealias Requests = Set<Request>
 	
-	public init<S>(store: Store<S>, lens: @escaping (S) -> Requests, commandFactory: @escaping (Request) -> Command) {
+	public init<S>(store: Store<S>, lens: @escaping (S) -> Requests, commandFactory: @escaping (Request) -> Subscription) {
 		dispatcher = store
-		createCommand = commandFactory
+		createSubscription = commandFactory
 		unsubscriber = store.subscribe(observer: { [weak self] state in
 			self?.configure(using: lens(state))
 		})
 	}
 
 	private let dispatcher: Dispatcher
-	private let createCommand: (Request) -> Command
+	private let createSubscription: (Request) -> Subscription
 	private var unsubscriber: Unsubscriber?
-	private var inFlight: [Request: Command] = [:]
+	private var inFlight: [Request: Subscription] = [:]
 	
 	private func configure(using requests: Requests) {
 		for each in Set(inFlight.keys).subtracting(requests) {
@@ -38,7 +38,7 @@ class CommandComponent<Request: Hashable> {
 			inFlight.removeValue(forKey: each)
 		}
 		for each in requests.subtracting(inFlight.keys) {
-			let command = createCommand(each)
+			let command = createSubscription(each)
 			inFlight[each] = command
 			command.launch(dispatcher: dispatcher)
 		}

@@ -11,16 +11,16 @@ public final
 class URLRequestComponent {
 	
 	public init<S>(store: Store<S>, lens: @escaping (S) -> Set<URLRequest>, session: URLSession = URLSession.shared) {
-		component = CommandComponent(store: store, lens: lens, commandFactory: {
-			return URLRequestCommand(request: $0, session: session)
+		component = SubscriptionComponent(store: store, lens: lens, commandFactory: {
+			return URLRequestSubscription(request: $0, session: session)
 		})
 	}
 	
-	let component: CommandComponent<URLRequest>
+	let component: SubscriptionComponent<URLRequest>
 }
 
 public final
-class URLRequestCommand: Command {
+class URLRequestSubscription: Subscription {
 	
 	public init(request: URLRequest, session: URLSession = URLSession.shared) {
 		self.request = request
