@@ -47,6 +47,9 @@ class Store<S: State>: Dispatcher, Publisher {
 		DispatchQueue.main.async {
 			guard !self.isDispatching else { fatalError("Cannot dispatch in the middle of a dispatch") }
 			self.isDispatching = true
+			for logger in self.loggers {
+				logger(self.state, action)
+			}
 			for subscriber in self.subscribers.values {
 				subscriber(self.state)
 			}
