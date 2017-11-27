@@ -11,7 +11,7 @@ public final
 class URLRequestComponent {
 	
 	public init<S>(store: Store<S>, lens: @escaping (S) -> Set<URLRequest>, session: URLSession = URLSession.shared) {
-		component = SubscriptionComponent(store: store, lens: lens, commandFactory: {
+		component = SubscriptionComponent(store: store, lens: lens, subscriptionFactory: {
 			return URLRequestSubscription(request: $0, session: session)
 		})
 	}

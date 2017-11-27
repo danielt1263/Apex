@@ -19,9 +19,9 @@ public final
 class SubscriptionComponent<Request: Hashable> {
 	public typealias Requests = Set<Request>
 	
-	public init<S>(store: Store<S>, lens: @escaping (S) -> Requests, commandFactory: @escaping (Request) -> Subscription) {
+	public init<S>(store: Store<S>, lens: @escaping (S) -> Requests, subscriptionFactory: @escaping (Request) -> Subscription) {
 		dispatcher = store
-		createSubscription = commandFactory
+		createSubscription = subscriptionFactory
 		unsubscriber = store.subscribe(observer: { [weak self] state in
 			self?.configure(using: lens(state))
 		})
@@ -38,9 +38,9 @@ class SubscriptionComponent<Request: Hashable> {
 			inFlight.removeValue(forKey: each)
 		}
 		for each in requests.subtracting(inFlight.keys) {
-			let command = createSubscription(each)
-			inFlight[each] = command
-			command.launch(dispatcher: dispatcher)
+			let subscription = createSubscription(each)
+			inFlight[each] = subscription
+			subscription.launch(dispatcher: dispatcher)
 		}
 	}
 }
