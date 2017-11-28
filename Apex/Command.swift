@@ -10,7 +10,7 @@ import Foundation
 
 
 public final class Command {
-	init(work: @escaping (@escaping (Action) -> Void) -> Void) {
+	public init(work: @escaping (@escaping (Action) -> Void) -> Void) {
 		self.work = work
 	}
 
