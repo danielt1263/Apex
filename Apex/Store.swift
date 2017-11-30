@@ -33,11 +33,13 @@ class Store<S: State>: Dispatcher, Publisher {
 	public typealias State = S
 	public typealias Logger = (S, Action) -> Void
 
-	public init(initial: (State, Command?), update: @escaping (State, Action) -> (State, Command?), loggers: [Logger] = []) {
+	public init(initial: (State, [Command]), update: @escaping (State, Action) -> (State, [Command]), loggers: [Logger] = []) {
 		self.state = initial.0
 		self.update = update
 		self.loggers = loggers
-		initial.1?.execute(self.dispatch)
+		for command in initial.1 {
+			command.execute(self.dispatch)
+		}
 	}
 
 	public func dispatch(action: Action) -> Void {
@@ -54,9 +56,10 @@ class Store<S: State>: Dispatcher, Publisher {
 				subscriber(self.state)
 			}
 			self.isDispatching = false
-			result.1?.execute(self.dispatch)
+			for command in result.1 {
+				command.execute(self.dispatch)
+			}
 		}
-
 	}
 
 	public func subscribe(observer: @escaping Observer) -> Unsubscriber {
@@ -70,7 +73,7 @@ class Store<S: State>: Dispatcher, Publisher {
 	}
 
 	private let queue = DispatchQueue(label: "store")
-	private let update: (State, Action) -> (State, Command?)
+	private let update: (State, Action) -> (State, [Command])
 	private let loggers: [Logger]
 	private var state: S
 	private var isDispatching = false
