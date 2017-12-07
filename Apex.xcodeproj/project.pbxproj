@@ -17,7 +17,6 @@
 		727B2FA81F804EDB003A325D /* NavigationComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 727B2FA71F804EDB003A325D /* NavigationComponent.swift */; };
 		727B2FAA1F804F47003A325D /* PushPopExpress.swift in Sources */ = {isa = PBXBuildFile; fileRef = 727B2FA91F804F47003A325D /* PushPopExpress.swift */; };
 		72BB6C6E1F25198B00C42AF1 /* ViewControllerPresentationComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72BB6C6B1F25198B00C42AF1 /* ViewControllerPresentationComponent.swift */; };
-		72BB6C6F1F25198B00C42AF1 /* URLRequestComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72BB6C6C1F25198B00C42AF1 /* URLRequestComponent.swift */; };
 		72BB6C701F25198B00C42AF1 /* SubscriptionComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72BB6C6D1F25198B00C42AF1 /* SubscriptionComponent.swift */; };
 		72BB6C7B1F251A6A00C42AF1 /* ApexRecorder.h in Headers */ = {isa = PBXBuildFile; fileRef = 72BB6C791F251A6A00C42AF1 /* ApexRecorder.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		72BB6C821F251A9A00C42AF1 /* State.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72BB6C811F251A9A00C42AF1 /* State.swift */; };
@@ -47,7 +46,6 @@
 		727B2FA71F804EDB003A325D /* NavigationComponent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NavigationComponent.swift; sourceTree = "<group>"; };
 		727B2FA91F804F47003A325D /* PushPopExpress.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushPopExpress.swift; sourceTree = "<group>"; };
 		72BB6C6B1F25198B00C42AF1 /* ViewControllerPresentationComponent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewControllerPresentationComponent.swift; sourceTree = "<group>"; };
-		72BB6C6C1F25198B00C42AF1 /* URLRequestComponent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = URLRequestComponent.swift; sourceTree = "<group>"; };
 		72BB6C6D1F25198B00C42AF1 /* SubscriptionComponent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SubscriptionComponent.swift; sourceTree = "<group>"; };
 		72BB6C771F251A6A00C42AF1 /* ApexRecorder.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ApexRecorder.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		72BB6C791F251A6A00C42AF1 /* ApexRecorder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ApexRecorder.h; sourceTree = "<group>"; };
@@ -108,7 +106,6 @@
 				0920AFF21FCC68B300215157 /* Command.swift */,
 				72BB6C6B1F25198B00C42AF1 /* ViewControllerPresentationComponent.swift */,
 				72BB6C6D1F25198B00C42AF1 /* SubscriptionComponent.swift */,
-				72BB6C6C1F25198B00C42AF1 /* URLRequestComponent.swift */,
 				727B2FA71F804EDB003A325D /* NavigationComponent.swift */,
 				09C5D8001E92F3E100305F5C /* PopPushAlgorithm.swift */,
 				090569651E79C5DC00C3A4A8 /* Apex.h */,
@@ -297,7 +294,6 @@
 				727B2FA81F804EDB003A325D /* NavigationComponent.swift in Sources */,
 				0920AFF31FCC68B300215157 /* Command.swift in Sources */,
 				72BB6C701F25198B00C42AF1 /* SubscriptionComponent.swift in Sources */,
-				72BB6C6F1F25198B00C42AF1 /* URLRequestComponent.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

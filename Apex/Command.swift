@@ -10,25 +10,13 @@ import Foundation
 
 
 public final class Command {
-	public init(work: @escaping (@escaping (Action) -> Void) -> Void) {
+	public init(work: @escaping (Dispatcher) -> Void) {
 		self.work = work
 	}
 
-	func execute(_ f: @escaping (Action) -> Void) {
-		retain = self
-		listener = f
-		work(self.fulfill)
+	func execute(_ dispatcher: Dispatcher) {
+		work(dispatcher)
 	}
 
-	private func fulfill(msg: Action) {
-		if let listener = listener {
-			listener(msg)
-			self.listener = nil
-			self.retain = nil
-		}
-	}
-
-	private let work: (@escaping (Action) -> Void) -> Void
-	private var listener: ((Action) -> Void)?
-	private var retain: Command?
+	private let work: (Dispatcher) -> Void
 }

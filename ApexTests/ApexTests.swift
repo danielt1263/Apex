@@ -10,27 +10,33 @@ import XCTest
 @testable import Apex
 
 class ApexTests: XCTestCase {
-    
-    override func setUp() {
-        super.setUp()
-        // Put setup code here. This method is called before the invocation of each test method in the class.
-    }
-    
-    override func tearDown() {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
-        super.tearDown()
-    }
-    
-    func testExample() {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
-    }
-    
-    func testPerformanceExample() {
-        // This is an example of a performance test case.
-        self.measure {
-            // Put the code you want to measure the time of here.
-        }
-    }
-    
+
+	func testInitialCommandExecution() {
+		weak var expect = expectation(description: "Example")
+		_ = Store<TestState>(initial: (TestState(), [testCommand(expect)]), update: { state, _ in
+			return (state, [])
+		})
+		waitForExpectations(timeout: 1, handler: nil)
+	}
+
+	func testCommandExecution() {
+		weak var expect = expectation(description: "Example")
+		let store = Store<TestState>(initial: (TestState(), []), update: { (state, action) -> (TestState, [Command]) in
+			return (state, [testCommand(expect)])
+		})
+		store.dispatch(action: TestAction.test)
+		waitForExpectations(timeout: 1, handler: nil)
+	}
+}
+
+enum TestAction: Action {
+	case test
+}
+
+struct TestState { }
+
+func testCommand(_ expect: XCTestExpectation?) -> Command {
+	return Command { dispatch in
+		expect?.fulfill()
+	}
 }

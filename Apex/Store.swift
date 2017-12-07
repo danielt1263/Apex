@@ -22,60 +22,46 @@ protocol Publisher {
 	func subscribe(observer: @escaping Observer) -> Unsubscriber
 }
 
-public
-protocol State {
-	mutating func transition(_ action: Action)
-}
-
 public final
-class Store<S: State>: Dispatcher, Publisher {
+class Store<S>: Dispatcher, Publisher {
 
 	public typealias State = S
-	public typealias Logger = (S, Action) -> Void
 
-	public init(initial: (State, [Command]), update: @escaping (State, Action) -> (State, [Command]), loggers: [Logger] = []) {
+	public init(initial: (State, [Command]), update: @escaping (State, Action) -> (State, [Command])) {
 		self.state = initial.0
 		self.update = update
-		self.loggers = loggers
 		for command in initial.1 {
-			command.execute(self.dispatch)
+			command.execute(self)
 		}
 	}
 
 	public func dispatch(action: Action) -> Void {
+		guard !self.isDispatching else { fatalError("Cannot dispatch in the middle of a dispatch") }
+		self.isDispatching = true
 		let result = update(state, action)
 		state = result.0
 
-		DispatchQueue.main.async {
-			guard !self.isDispatching else { fatalError("Cannot dispatch in the middle of a dispatch") }
-			self.isDispatching = true
-			for logger in self.loggers {
-				logger(self.state, action)
-			}
-			for subscriber in self.subscribers.values {
-				subscriber(self.state)
-			}
-			self.isDispatching = false
-			for command in result.1 {
-				command.execute(self.dispatch)
-			}
+		for subscriber in self.subscribers.values {
+			subscriber(self.state)
 		}
+		for command in result.1 {
+			command.execute(self)
+		}
+		self.isDispatching = false
 	}
 
 	public func subscribe(observer: @escaping Observer) -> Unsubscriber {
 		let id = UUID()
 		subscribers[id] = { state in observer(state) }
 		let dispose = { [weak self] () -> Void in
-			let _ = self?.subscribers.removeValue(forKey: id)
+			self?.subscribers.removeValue(forKey: id)
 		}
 		observer(state)
 		return Unsubscriber(method: dispose)
 	}
 
-	private let queue = DispatchQueue(label: "store")
 	private let update: (State, Action) -> (State, [Command])
-	private let loggers: [Logger]
-	private var state: S
+	private var state: State
 	private var isDispatching = false
 	private var subscribers: [UUID: Observer] = [:]
 }
