@@ -19,13 +19,13 @@ public enum RecorderAction: Action {
 	case redo
 }
 
-public struct Recordable<T: State>: RecorderState {
-	public typealias Wrapped = T
-	public var past: [T] = []
-	public var present: T
-	public var future: [T] = []
+public struct Recordable<State>: RecorderState {
+	public typealias Wrapped = State
+	public var past: [State] = []
+	public var present: State
+	public var future: [State] = []
 	
-	public init(state: T) {
+	public init(state: State) {
 		present = state
 	}
 	
