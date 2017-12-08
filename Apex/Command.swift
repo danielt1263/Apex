@@ -9,7 +9,8 @@
 import Foundation
 
 
-public final class Command {
+public final
+class Command {
 	public init(work: @escaping (Dispatcher) -> Void) {
 		self.work = work
 	}

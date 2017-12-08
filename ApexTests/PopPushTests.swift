@@ -19,6 +19,7 @@ struct PushPopResult: Equatable {
 	}
 }
 
+final
 class PopPushTests: XCTestCase {
 
 	override func setUp() {

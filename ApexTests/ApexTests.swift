@@ -9,6 +9,7 @@
 import XCTest
 @testable import Apex
 
+final
 class ApexTests: XCTestCase {
 
 	func testInitialCommandExecution() {
