@@ -8,16 +8,34 @@
 
 import Foundation
 
+public
+protocol Command: Equatable {
+	associatedtype Action
+	func execute<D>(dispatcher: D) where D: Dispatcher, D.Action == Action
+}
 
-public final
-class Command {
-	public init(work: @escaping (Dispatcher) -> Void) {
-		self.work = work
+final class AnyCommand<A>: Command {
+
+	typealias Action = A
+
+	init<C>(_ command: C) where C: Command, C.Action == Action {
+		value = command
+		_execute = { command.execute(dispatcher: $0) }
+		isEqual = {
+			guard let other = $0.value as? C else { return false }
+			return command == other
+		}
 	}
 
-	func execute(_ dispatcher: Dispatcher) {
-		work(dispatcher)
+	func execute<D>(dispatcher: D) where D : Dispatcher, A == D.Action {
+		_execute(AnyDispatcher(dispatcher))
 	}
 
-	private let work: (Dispatcher) -> Void
+	static func ==(lhs: AnyCommand<A>, rhs: AnyCommand<A>) -> Bool {
+		return lhs.isEqual(rhs)
+	}
+
+	private let value: Any
+	private let _execute: (AnyDispatcher<A>) -> Void
+	private let isEqual: (AnyCommand) -> Bool
 }

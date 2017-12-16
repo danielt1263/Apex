@@ -9,28 +9,23 @@
 import Foundation
 
 
-public
-protocol Subscription {
-	func launch(dispatcher: Dispatcher)
-	func cancel()
-}
-
 public final
-class SubscriptionComponent<Request: Hashable> {
+class SubscriptionComponent<Request: Hashable, A> {
+	public typealias Action = A
 	public typealias Requests = Set<Request>
 	
-	public init<S>(store: Store<S>, lens: @escaping (S) -> Requests, subscriptionFactory: @escaping (Request) -> Subscription) {
-		dispatcher = store
-		createSubscription = subscriptionFactory
+	public init<State, Sub>(store: Store<State, Action>, lens: @escaping (State) -> Requests, subscriptionFactory: @escaping (Request) -> Sub) where Sub: Subscription, Sub.Action == Action {
+		dispatcher = AnyDispatcher(store)
+		createSubscription = { AnySubscription(subscriptionFactory($0)) }
 		unsubscriber = store.subscribe(observer: { [weak self] state in
 			self?.configure(using: lens(state))
 		})
 	}
 
-	private let dispatcher: Dispatcher
-	private let createSubscription: (Request) -> Subscription
+	private let dispatcher: AnyDispatcher<Action>
+	private let createSubscription: (Request) -> AnySubscription<Action>
 	private var unsubscriber: Unsubscriber?
-	private var inFlight: [Request: Subscription] = [:]
+	private var inFlight: [Request: AnySubscription<Action>] = [:]
 	
 	private func configure(using requests: Requests) {
 		for each in Set(inFlight.keys).subtracting(requests) {
