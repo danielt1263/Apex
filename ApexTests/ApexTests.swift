@@ -22,7 +22,7 @@ class ApexTests: XCTestCase {
 
 	func testCommandExecution() {
 		weak var expect = expectation(description: "Example")
-		let store = Store<TestState>(initial: (TestState(), []), update: { (state, action) -> (TestState, [Command]) in
+		let store = Store<TestState>(initial: (TestState(), []), update: { state, _ in
 			return (state, [testCommand(expect)])
 		})
 		store.dispatch(action: TestAction.test)
@@ -36,8 +36,8 @@ enum TestAction: Action {
 
 struct TestState { }
 
-func testCommand(_ expect: XCTestExpectation?) -> Command {
-	return Command { dispatch in
+func testCommand(_ expect: XCTestExpectation?) -> BlockCommand {
+	return BlockCommand(description: "Test Command") { dispatch in
 		expect?.fulfill()
 	}
 }

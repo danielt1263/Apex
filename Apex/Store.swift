@@ -8,6 +8,9 @@
 
 
 public
+protocol Action { }
+
+public
 protocol Publisher {
 	associatedtype State
 	typealias Observer = (State) -> Void
@@ -15,17 +18,13 @@ protocol Publisher {
 }
 
 public final
-class Store<S, A>: Dispatcher, Publisher {
+class Store<S>: Dispatcher, Publisher {
 
-	public typealias Action = A
 	public typealias State = S
 
-	public init<C>(initial: (State, [C]), update: @escaping (State, Action) -> (State, [C])) where C: Command, C.Action == Action {
+	public init(initial: (State, [Command]), update: @escaping (State, Action) -> (State, [Command])) {
 		self.state = initial.0
-		self.update = { state, message in
-			let (s, cs) = update(state, message)
-			return (s, cs.map { AnyCommand($0) })
-		}
+		self.update = update
 		for command in initial.1 {
 			command.execute(dispatcher: self)
 		}
@@ -58,7 +57,7 @@ class Store<S, A>: Dispatcher, Publisher {
 	}
 
 	private let queue = DispatchQueue(label: "Apex")
-	private let update: (State, Action) -> (State, [AnyCommand<Action>])
+	private let update: (State, Action) -> (State, [Command])
 	private var state: State
 	private var subscribers: [UUID: Observer] = [:]
 }
