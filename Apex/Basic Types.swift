@@ -6,10 +6,12 @@
 //  Copyright © 2017 Daniel Tartaglia. MIT License
 //
 
+public
 enum Result<T> {
 	case success(T)
 	case failure(Error)
 
+	public
 	func map<U>(transform: (T) throws -> U) -> Result<U> {
 		switch self {
 		case .success(let t):
@@ -25,5 +27,6 @@ enum Result<T> {
 	}
 }
 
+public
 struct UnknownError: Error { }
 

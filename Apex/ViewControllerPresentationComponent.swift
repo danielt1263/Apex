@@ -16,12 +16,12 @@ class ViewControllerPresentationComponent<P: Publisher, ViewControllerID: Hashab
 		rootViewController = root
 		self.lens = lens
 		createViewController = factory
-		unsubscriber = publisher.subscribe(observer: { [weak self] state in
+		unobserver = publisher.observe(observer: { [weak self] state in
 			self?.configure(using: state)
 		})
 	}
 
-	private var unsubscriber: Unsubscriber?
+	private var unobserver: Unobserver?
 	private var currentStack: [ViewControllerID] = []
 	private var viewControllers: [ViewControllerID: WeakBox<UIViewController>] = [:]
 	private let queue = DispatchQueue(label: "view_controller_presenter")

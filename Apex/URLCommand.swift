@@ -6,14 +6,17 @@
 //  Copyright © 2017 Daniel Tartaglia. MIT License
 //
 
+public
 struct URLCommand: Command, Equatable {
 
+	public
 	init(session: URLSession, request: URLRequest, action: @escaping (Result<(Data, URLResponse)>) -> Action) {
 		self.session = session
 		self.request = request
 		self.action = action
 	}
 
+	public
 	func execute(dispatcher: Dispatcher) {
 		session.dataTask(with: request) { (data, response, error) in
 			let action: Action
@@ -24,9 +27,10 @@ struct URLCommand: Command, Equatable {
 				action = self.action(.failure(error ?? UnknownError()))
 			}
 			dispatcher.dispatch(action: action)
-		}
+		}.resume()
 	}
 
+	public
 	static func ==(lhs: URLCommand, rhs: URLCommand) -> Bool {
 		return lhs.request == rhs.request
 	}

@@ -7,7 +7,6 @@
 //
 
 
-
 public
 protocol Command {
 	func execute(dispatcher: Dispatcher)

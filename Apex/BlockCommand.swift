@@ -11,6 +11,7 @@ class BlockCommand: Command, Equatable, CustomStringConvertible {
 
 	public let description: String
 
+	public
 	init(description: String, work: @escaping (Dispatcher) -> Void) {
 		self.description = description
 		self.work = work

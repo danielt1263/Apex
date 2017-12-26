@@ -16,12 +16,12 @@ class NavigationComponent<P: Publisher, ViewControllerID: Hashable> {
 		self.navController = navController
 		self.lens = lens
 		createViewController = factory
-		unsubscriber = publisher.subscribe(observer: { [weak self] state in
+		unobserver = publisher.observe(observer: { [weak self] state in
 			self?.configure(with: state)
 		})
 	}
 
-	private var unsubscriber: Unsubscriber?
+	private var unobserver: Unobserver?
 	private var currentStack: [ViewControllerID] = []
 	private let navController: UINavigationController
 	private let lens: (P.State) -> [ViewControllerID]

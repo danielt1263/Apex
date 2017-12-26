@@ -16,7 +16,7 @@ class ApexTests: XCTestCase {
 		weak var expect = expectation(description: "Example")
 		_ = Store<TestState>(initial: (TestState(), [testCommand(expect)]), update: { state, _ in
 			return (state, [])
-		})
+		}, subscriptions: { _ in [] })
 		waitForExpectations(timeout: 1, handler: nil)
 	}
 
@@ -24,7 +24,7 @@ class ApexTests: XCTestCase {
 		weak var expect = expectation(description: "Example")
 		let store = Store<TestState>(initial: (TestState(), []), update: { state, _ in
 			return (state, [testCommand(expect)])
-		})
+		}, subscriptions: { _ in [] })
 		store.dispatch(action: TestAction.test)
 		waitForExpectations(timeout: 1, handler: nil)
 	}
