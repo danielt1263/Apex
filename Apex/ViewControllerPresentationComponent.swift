@@ -41,10 +41,10 @@ class ViewControllerPresentationComponent<P: Publisher, ViewControllerID: Hashab
 
 	private func pop(id: ViewControllerID, isLast: Bool) -> Void {
 		let semaphore = DispatchSemaphore(value: 0)
-		let top = topViewController()
-		guard self.viewControllers.values.contains(where: { $0.value == top }) else { return }
-		assert(top != self.rootViewController, "Can't dismiss the root view controller.")
 		DispatchQueue.main.async {
+			let top = topViewController()
+			guard self.viewControllers.values.contains(where: { $0.value == top }) else { return }
+			assert(top != self.rootViewController, "Can't dismiss the root view controller.")
 			top.dismiss(animated: isLast, completion: {
 				semaphore.signal()
 			})
