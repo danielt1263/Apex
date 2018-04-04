@@ -40,9 +40,6 @@ class Store<S>: Dispatcher, Publisher {
 				for subscriber in self.observers.values {
 					subscriber(self.state)
 				}
-				for command in result.1 {
-					command.execute(dispatcher: self)
-				}
 				let subscribers = self.subscriptions(self.state)
 				for each in self.inFlight.subtracting(subscribers) {
 					each.cancel()
@@ -51,6 +48,9 @@ class Store<S>: Dispatcher, Publisher {
 				for each in subscribers.subtracting(self.inFlight) {
 					self.inFlight.insert(each)
 					each.launch(dispatcher: self)
+				}
+				for command in result.1 {
+					command.execute(dispatcher: self)
 				}
 			}
 		}
