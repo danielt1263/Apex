@@ -8,12 +8,15 @@
 
 import Foundation
 
+public
 class Timer: Subscription {
+	public
 	init(duration: TimeInterval, action: @escaping @autoclosure () -> Action) {
 		self.duration = duration
 		self.action = action
 	}
 
+	public
 	func launch(dispatcher: Dispatcher) {
 		canceled = false
 		DispatchQueue.main.asyncAfter(deadline: .now() + duration) { [weak self] in
@@ -24,19 +27,22 @@ class Timer: Subscription {
 		}
 	}
 
+	public
 	func cancel() {
 		canceled = true
 	}
 
+	public
 	var hashValue: Int {
 		return duration.hashValue
 	}
 
+	public
 	static func ==(lhs: Timer, rhs: Timer) -> Bool {
 		return lhs.duration == rhs.duration
 	}
 
-	let duration: TimeInterval
-	let action: () -> Action
-	var canceled: Bool = false
+	private let duration: TimeInterval
+	private let action: () -> Action
+	private var canceled: Bool = false
 }
