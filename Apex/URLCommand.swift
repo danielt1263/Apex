@@ -21,7 +21,7 @@ struct URLCommand: Command, Equatable {
 		session.dataTask(with: request) { (data, response, error) in
 			if let action = self.action {
 				if let data = data, let response = response {
-					dispatcher.dispatch(action: action(.success((data, response))))
+					dispatcher.dispatch(action: action(.success(data, response)))
 				}
 				else {
 					dispatcher.dispatch(action: action(.failure(error ?? UnknownError())))
@@ -48,3 +48,6 @@ enum URLCommandUpdate {
 	case success(Data, URLResponse)
 	case failure(Error)
 }
+
+public
+struct UnknownError: Error { }

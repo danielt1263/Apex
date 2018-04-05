@@ -15,7 +15,6 @@
 		09C5D8041E92F3E100305F5C /* PopPushAlgorithm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09C5D8001E92F3E100305F5C /* PopPushAlgorithm.swift */; };
 		09EB29762076A02900B7DFF7 /* Timer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09EB29752076A02900B7DFF7 /* Timer.swift */; };
 		721C62EB1E7D51B40047A914 /* PopPushTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 721C62EA1E7D51B40047A914 /* PopPushTests.swift */; };
-		726C264E1FE763970041EA8D /* Basic Types.swift in Sources */ = {isa = PBXBuildFile; fileRef = 726C264D1FE763970041EA8D /* Basic Types.swift */; };
 		726C26501FE763CD0041EA8D /* URLCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 726C264F1FE763CD0041EA8D /* URLCommand.swift */; };
 		726C26521FE80E220041EA8D /* BlockCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 726C26511FE80E220041EA8D /* BlockCommand.swift */; };
 		727B2FA81F804EDB003A325D /* NavigationComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 727B2FA71F804EDB003A325D /* NavigationComponent.swift */; };
@@ -49,7 +48,6 @@
 		09C5D8001E92F3E100305F5C /* PopPushAlgorithm.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PopPushAlgorithm.swift; sourceTree = "<group>"; };
 		09EB29752076A02900B7DFF7 /* Timer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Timer.swift; sourceTree = "<group>"; };
 		721C62EA1E7D51B40047A914 /* PopPushTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PopPushTests.swift; sourceTree = "<group>"; };
-		726C264D1FE763970041EA8D /* Basic Types.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Basic Types.swift"; sourceTree = "<group>"; };
 		726C264F1FE763CD0041EA8D /* URLCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLCommand.swift; sourceTree = "<group>"; };
 		726C26511FE80E220041EA8D /* BlockCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockCommand.swift; sourceTree = "<group>"; };
 		727B2FA71F804EDB003A325D /* NavigationComponent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NavigationComponent.swift; sourceTree = "<group>"; };
@@ -116,7 +114,6 @@
 				726C26541FE80E350041EA8D /* Commands */,
 				090569651E79C5DC00C3A4A8 /* Apex.h */,
 				090569661E79C5DC00C3A4A8 /* Info.plist */,
-				726C264D1FE763970041EA8D /* Basic Types.swift */,
 				09C5D7FD1E92F3E100305F5C /* Store.swift */,
 				0920AFF21FCC68B300215157 /* Command.swift */,
 				72A5A33E1FE5AEF1009FD665 /* Subscription.swift */,
@@ -249,18 +246,19 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0820;
-				LastUpgradeCheck = 0900;
+				LastUpgradeCheck = 0930;
 				ORGANIZATIONNAME = "Daniel Tartaglia";
 				TargetAttributes = {
 					090569611E79C5DC00C3A4A8 = {
 						CreatedOnToolsVersion = 8.2.1;
 						DevelopmentTeam = XA4HQLH76F;
-						LastSwiftMigration = 0830;
+						LastSwiftMigration = 0930;
 						ProvisioningStyle = Automatic;
 					};
 					0905696A1E79C5DD00C3A4A8 = {
 						CreatedOnToolsVersion = 8.2.1;
 						DevelopmentTeam = XA4HQLH76F;
+						LastSwiftMigration = 0930;
 						ProvisioningStyle = Automatic;
 					};
 					72BB6C761F251A6A00C42AF1 = {
@@ -319,7 +317,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				726C264E1FE763970041EA8D /* Basic Types.swift in Sources */,
 				726C26501FE763CD0041EA8D /* URLCommand.swift in Sources */,
 				09C5D8011E92F3E100305F5C /* Store.swift in Sources */,
 				09C5D8041E92F3E100305F5C /* PopPushAlgorithm.swift in Sources */,
@@ -375,6 +372,7 @@
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
@@ -382,6 +380,7 @@
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
@@ -434,6 +433,7 @@
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
@@ -441,6 +441,7 @@
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
@@ -490,7 +491,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 3.0;
+				SWIFT_VERSION = 4.0;
 			};
 			name = Debug;
 		};
@@ -510,7 +511,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.google.danielt1263.Apex;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 3.0;
+				SWIFT_VERSION = 4.0;
 			};
 			name = Release;
 		};
@@ -523,7 +524,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.google.danielt1263.ApexTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 3.0;
+				SWIFT_VERSION = 4.0;
 			};
 			name = Debug;
 		};
@@ -536,7 +537,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.google.danielt1263.ApexTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 3.0;
+				SWIFT_VERSION = 4.0;
 			};
 			name = Release;
 		};
