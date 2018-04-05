@@ -10,7 +10,7 @@ public
 struct URLCommand: Command, Equatable {
 
 	public
-	init(session: URLSession, request: URLRequest, action: @escaping (Result<(Data, URLResponse)>) -> Action) {
+	init(session: URLSession, request: URLRequest, action: URLCommandActionCreator?) {
 		self.session = session
 		self.request = request
 		self.action = action
@@ -19,14 +19,14 @@ struct URLCommand: Command, Equatable {
 	public
 	func execute(dispatcher: Dispatcher) {
 		session.dataTask(with: request) { (data, response, error) in
-			let action: Action
-			if let data = data, let response = response {
-				action = self.action(.success((data, response)))
+			if let action = self.action {
+				if let data = data, let response = response {
+					dispatcher.dispatch(action: action(.success((data, response))))
+				}
+				else {
+					dispatcher.dispatch(action: action(.failure(error ?? UnknownError())))
+				}
 			}
-			else {
-				action = self.action(.failure(error ?? UnknownError()))
-			}
-			dispatcher.dispatch(action: action)
 		}.resume()
 	}
 
@@ -37,5 +37,14 @@ struct URLCommand: Command, Equatable {
 
 	private let session: URLSession
 	private let request: URLRequest
-	private let action: (Result<(Data, URLResponse)>) -> Action
+	private let action: URLCommandActionCreator?
+}
+
+public
+typealias URLCommandActionCreator = (URLCommandUpdate) -> Action
+
+public
+enum URLCommandUpdate {
+	case success(Data, URLResponse)
+	case failure(Error)
 }

@@ -13,6 +13,7 @@
 		0920AFF31FCC68B300215157 /* Command.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0920AFF21FCC68B300215157 /* Command.swift */; };
 		09C5D8011E92F3E100305F5C /* Store.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09C5D7FD1E92F3E100305F5C /* Store.swift */; };
 		09C5D8041E92F3E100305F5C /* PopPushAlgorithm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09C5D8001E92F3E100305F5C /* PopPushAlgorithm.swift */; };
+		09EB29762076A02900B7DFF7 /* Timer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09EB29752076A02900B7DFF7 /* Timer.swift */; };
 		721C62EB1E7D51B40047A914 /* PopPushTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 721C62EA1E7D51B40047A914 /* PopPushTests.swift */; };
 		726C264E1FE763970041EA8D /* Basic Types.swift in Sources */ = {isa = PBXBuildFile; fileRef = 726C264D1FE763970041EA8D /* Basic Types.swift */; };
 		726C26501FE763CD0041EA8D /* URLCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 726C264F1FE763CD0041EA8D /* URLCommand.swift */; };
@@ -46,6 +47,7 @@
 		0920AFF21FCC68B300215157 /* Command.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Command.swift; sourceTree = "<group>"; };
 		09C5D7FD1E92F3E100305F5C /* Store.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Store.swift; sourceTree = "<group>"; };
 		09C5D8001E92F3E100305F5C /* PopPushAlgorithm.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PopPushAlgorithm.swift; sourceTree = "<group>"; };
+		09EB29752076A02900B7DFF7 /* Timer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Timer.swift; sourceTree = "<group>"; };
 		721C62EA1E7D51B40047A914 /* PopPushTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PopPushTests.swift; sourceTree = "<group>"; };
 		726C264D1FE763970041EA8D /* Basic Types.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Basic Types.swift"; sourceTree = "<group>"; };
 		726C264F1FE763CD0041EA8D /* URLCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLCommand.swift; sourceTree = "<group>"; };
@@ -110,6 +112,7 @@
 		090569641E79C5DC00C3A4A8 /* Apex */ = {
 			isa = PBXGroup;
 			children = (
+				09EB29772076A16F00B7DFF7 /* Subscriptions */,
 				726C26541FE80E350041EA8D /* Commands */,
 				090569651E79C5DC00C3A4A8 /* Apex.h */,
 				090569661E79C5DC00C3A4A8 /* Info.plist */,
@@ -134,6 +137,14 @@
 				090569721E79C5DD00C3A4A8 /* Info.plist */,
 			);
 			path = ApexTests;
+			sourceTree = "<group>";
+		};
+		09EB29772076A16F00B7DFF7 /* Subscriptions */ = {
+			isa = PBXGroup;
+			children = (
+				09EB29752076A02900B7DFF7 /* Timer.swift */,
+			);
+			name = Subscriptions;
 			sourceTree = "<group>";
 		};
 		726C26541FE80E350041EA8D /* Commands */ = {
@@ -317,6 +328,7 @@
 				727B2FA81F804EDB003A325D /* NavigationComponent.swift in Sources */,
 				72A5A33D1FE5ABCF009FD665 /* Dispatcher.swift in Sources */,
 				0920AFF31FCC68B300215157 /* Command.swift in Sources */,
+				09EB29762076A02900B7DFF7 /* Timer.swift in Sources */,
 				726C26521FE80E220041EA8D /* BlockCommand.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
