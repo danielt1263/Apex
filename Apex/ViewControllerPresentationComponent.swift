@@ -34,20 +34,20 @@ class ViewControllerPresentationComponent<P: Publisher, ViewControllerID: Hashab
 		// the delay is needed to ensure that UIAlertControllers are fully deleted before culling happens.
 		queue.asyncAfter(deadline: .now() + 0.2) {
 			self.cull()
-			popPush(current: self.currentStack, target: presentationStack, pop: self.pop, push: self.push(state: state))
+			popPushExpress(current: self.currentStack, target: presentationStack, popTo: self.popTo, push: self.push(state: state))
 			self.currentStack = presentationStack
 		}
 	}
 
-	private func pop(id: ViewControllerID, isLast: Bool) -> Void {
+	private func popTo(index: Int, isLast: Bool) {
 		let semaphore = DispatchSemaphore(value: 0)
 		DispatchQueue.main.async {
-			let top = topViewController()
-			guard self.viewControllers.values.contains(where: { $0.value == top }) else { return }
-			assert(top != self.rootViewController, "Can't dismiss the root view controller.")
-			top.dismiss(animated: isLast, completion: {
-				semaphore.signal()
-			})
+			let id = self.currentStack[index]
+			if let vc = self.viewControllers[id]?.value {
+				vc.dismiss(animated: isLast && self.currentStack.count < index + 2, completion: {
+					semaphore.signal()
+				})
+			}
 		}
 		semaphore.wait()
 	}
