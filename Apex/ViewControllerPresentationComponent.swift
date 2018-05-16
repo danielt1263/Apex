@@ -42,11 +42,18 @@ class ViewControllerPresentationComponent<P: Publisher, ViewControllerID: Hashab
 	private func popTo(index: Int, isLast: Bool) {
 		let semaphore = DispatchSemaphore(value: 0)
 		DispatchQueue.main.async {
-			let id = self.currentStack[index]
-			if let vc = self.viewControllers[id]?.value {
-				vc.dismiss(animated: isLast && self.currentStack.count < index + 2, completion: {
+			if index == -1 {
+				self.rootViewController.dismiss(animated: isLast && self.currentStack.count < index + 2, completion: {
 					semaphore.signal()
 				})
+			}
+			else {
+				let id = self.currentStack[index]
+				if let vc = self.viewControllers[id]?.value {
+					vc.dismiss(animated: isLast && self.currentStack.count < index + 2, completion: {
+						semaphore.signal()
+					})
+				}
 			}
 		}
 		semaphore.wait()
