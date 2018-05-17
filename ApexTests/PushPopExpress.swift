@@ -53,6 +53,17 @@ class PushPopExpress: XCTestCase {
 		XCTAssertEqual(popped?.isLast, true)
 		XCTAssertEqual(pushed, [])
 	}
+
+	func testPopOneToEmpty() {
+		let array1: [String] = ["a"]
+		let array2: [String] = []
+
+		popPushExpress(current: array1, target: array2, popTo: pop, push: push)
+
+		XCTAssertEqual(popped?.i, -1)
+		XCTAssertEqual(popped?.isLast, true)
+		XCTAssertEqual(pushed, [])
+	}
 	
 	func testPopPush() {
 		let array1: [String] = ["a", "b"]

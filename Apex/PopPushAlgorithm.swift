@@ -36,9 +36,7 @@ func popPushExpress<T>(current: [T], target: [T], popTo: (Int, _ isLast: Bool) -
 		handlePushes(currentIndex: indexOfChange, target: target, push: push)
 	}
 	else if current.count > target.count {
-		if !target.isEmpty {
-			popTo(target.count - 1, true)
-		}
+		popTo(target.count - 1, true)
 	}
 		
 	handlePushes(currentIndex: current.count, target: target, push: push)
