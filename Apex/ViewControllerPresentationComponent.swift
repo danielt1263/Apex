@@ -43,14 +43,14 @@ class ViewControllerPresentationComponent<P: Publisher, ViewControllerID: Hashab
 		let semaphore = DispatchSemaphore(value: 0)
 		DispatchQueue.main.async {
 			if index == -1 {
-				self.rootViewController.dismiss(animated: isLast && self.currentStack.count < index + 2, completion: {
+				self.rootViewController.dismiss(animated: isLast || self.currentStack.count < index + 2, completion: {
 					semaphore.signal()
 				})
 			}
 			else {
 				let id = self.currentStack[index]
 				if let vc = self.viewControllers[id]?.value {
-					vc.dismiss(animated: isLast && self.currentStack.count < index + 2, completion: {
+					vc.dismiss(animated: isLast || self.currentStack.count < index + 2, completion: {
 						semaphore.signal()
 					})
 				}
