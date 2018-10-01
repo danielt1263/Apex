@@ -87,14 +87,10 @@ class ViewControllerPresentationComponent<P: Publisher, ViewControllerID: Hashab
 
 }
 
-protocol ReferenceObject: class { }
-
 private
-struct WeakBox<T> where T: ReferenceObject {
+struct WeakBox<T> where T: AnyObject {
 	weak var value: T?
 }
-
-extension UIViewController: ReferenceObject { }
 
 private
 func topViewController() -> UIViewController {
